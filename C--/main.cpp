@@ -11,10 +11,10 @@ using namespace std;
 
 // For log purposes only. Will remove later
 map<int, string> TOKEN_TYPE_MAPPER = {
-	{NumericToken, "NumericToken"},
+	{NumberToken, "NumberToken"},
 	{PlusToken, "PlusToken"},
 	{MinusToken, "MinusToken"},
-	{StartToken, "StartToken"},
+	{StarToken, "StarToken"},
 	{SlashToken, "SlashToken"},
 	{OpenParenthesisToken, "OpenParenthesisToken"},
 	{CloseParenthesisToken, "CloseParenthesisToken"},

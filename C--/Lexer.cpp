@@ -27,7 +27,7 @@ Token Lexer::get_token()
 		int length = this->eat_until(isdigit);
 		std::string raw = this->text.substr(start, length);
 		int value = stoi(raw);
-		return Token(NumericToken, start, raw, &value);
+		return Token(NumberToken, start, raw, &value);
 	}
 
 	if (isspace(this->current())) {
@@ -42,7 +42,7 @@ Token Lexer::get_token()
 	switch (current) {
 	case '+': return Token(PlusToken, this->next(), current, nullptr);
 	case '-': return Token(MinusToken, this->next(), current, nullptr);
-	case '*': return Token(StartToken, this->next(), current, nullptr);
+	case '*': return Token(StarToken, this->next(), current, nullptr);
 	case '/': return Token(SlashToken, this->next(), current, nullptr);
 	case '(': return Token(OpenParenthesisToken, this->next(), current, nullptr);
 	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);

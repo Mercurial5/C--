@@ -4,11 +4,11 @@
 #include <string>
 
 enum TokenType {
-	NumericToken,
+	NumberToken,
 
 	PlusToken,
 	MinusToken,
-	StartToken,
+	StarToken,
 	SlashToken,
 
 	OpenParenthesisToken,
