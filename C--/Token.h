@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <any>
 
 #include "TokenType.h"
 
@@ -9,8 +10,8 @@ public:
 	TokenType type;
 	int position;
 	std::string raw;
-	void* value;
+	std::any value;
 
-	Token(TokenType, int, std::string, void*);
-	Token(TokenType, int, char, void*);
+	Token(TokenType, int, std::string, std::any);
+	Token(TokenType, int, char, std::any);
 };
