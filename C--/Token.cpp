@@ -1,6 +1,6 @@
 #include "Token.h"
 
-Token::Token(TokenType type, int position, std::string raw, std::any) {
+Token::Token(TokenType type, int position, std::string raw, std::any value) {
 	this->type = type;
 	this->position = position;
 	this->raw = raw;
