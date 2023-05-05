@@ -17,3 +17,4 @@ public:
 	NumberExpression(std::unique_ptr<Token>);
 
 };
+
