@@ -5,10 +5,8 @@
 
 #include "Token.h"
 
-typedef std::unique_ptr<Expression> UPE;
-typedef std::unique_ptr<Token> UPT;
-
-BinaryExpression::BinaryExpression(UPE left, UPT operator_token, UPE right) : Expression(BinaryExpressionType) {
+BinaryExpression::BinaryExpression(std::unique_ptr<Expression> left, std::unique_ptr<Token> operator_token, std::unique_ptr<Expression> right) : 
+	Expression(BinaryExpressionType) {
 	this->left = std::move(left);
 	this->operator_token = std::move(operator_token);
 	this->right = std::move(right);
