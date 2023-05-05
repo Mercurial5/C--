@@ -1,7 +1,13 @@
 #include <iostream>
 #include <vector>
 
-#include "Lexer.h"
+#include "Parser.h"
+
+#include "ExpressionType.h"
+#include "Expression.h"
+#include "NumberExpression.h"
+#include "BinaryExpression.h"
+#include "ParenthesizedExpression.h"
 
 #include "TokenType.h"
 #include "Token.h"
@@ -23,6 +29,12 @@ map<int, string> TOKEN_TYPE_MAPPER = {
 	{BadToken, "BadToken"}
 };
 
+map<int, string> EXPRESSION_TYPE_MAPPER = {
+	{ NumberExpressionType, "NumberExpressionType" },
+	{ BinaryExpressionType, "BinaryExpressionType" },
+	{ ParenthesizedExpressionType, "ParenthesizedExpressionType" },
+	{ BadExpressionType, "BadExpressionType" }
+};
 
 int main() {
 	while (true) {
@@ -30,14 +42,12 @@ int main() {
 		cout << "> ";
 		getline(cin, line);
 
-		Lexer lexer = Lexer(line);
-		vector<Token> tokens = lexer.tokenize();
+		Parser parser = Parser(line);
+		vector<unique_ptr<Expression>> expressions = parser.parse();
 
-		cout << "Tokens:" << endl;
-		for (Token token : tokens) {
-			cout << "\tToken type - " << TOKEN_TYPE_MAPPER[token.type] << endl;
-			cout << "\tToken position - " << token.position << endl;
-			cout << "\tToken raw string - " << token.raw << endl << endl;
+		cout << "Expressions:" << endl;
+		for (unique_ptr<Expression> &expression : expressions) {
+			cout << "\tExpression type - " << EXPRESSION_TYPE_MAPPER[expression->type] << endl;
 		}
 	}
 }
