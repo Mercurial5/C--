@@ -14,7 +14,7 @@ class Parser {
 	int position;
 public:
 	Parser(std::string);
-	std::vector<std::unique_ptr<Expression>> parse();
+	std::unique_ptr<Expression> parse();
 
 private:
 	std::unique_ptr<Expression> parse_expression();
