@@ -22,15 +22,9 @@ Parser::Parser(std::string text) {
 	this->position = 0;
 }
 
-std::vector<std::unique_ptr<Expression>> Parser::parse() {
-	std::vector<std::unique_ptr<Expression>> expressions;
-
-	while (this->current().type != TokenType::EndOfFileToken) {
-		std::unique_ptr<Expression> expression = this->parse_expression();
-		expressions.push_back(std::move(expression));
-	}
-
-	return expressions;
+std::unique_ptr<Expression> Parser::parse() {
+	std::unique_ptr<Expression> expression = this->parse_expression();
+	return std::move(expression);
 }
 
 std::unique_ptr<Expression> Parser::parse_expression() {
@@ -42,10 +36,10 @@ std::unique_ptr<Expression> Parser::parse_expression() {
 std::unique_ptr<Expression> Parser::parse_term() {
 	std::unique_ptr<Expression> left = this->parse_factor();
 
-	if (this->current().type == PlusToken || this->current().type == MinusToken) {
+	while (this->current().type == PlusToken || this->current().type == MinusToken) {
 		std::unique_ptr<Token> operator_token = std::make_unique<Token>(this->next());
 		std::unique_ptr<Expression> right = this->parse_factor();
-		return std::make_unique<BinaryExpression>(std::move(left), std::move(operator_token), std::move(right));
+		left = std::make_unique<BinaryExpression>(std::move(left), std::move(operator_token), std::move(right));
 	}
 
 	return left;
@@ -54,7 +48,7 @@ std::unique_ptr<Expression> Parser::parse_term() {
 std::unique_ptr<Expression> Parser::parse_factor() {
 	std::unique_ptr<Expression> left = this->parse_primary();
 
-	if (this->current().type == StarToken || this->current().type == SlashToken) {
+	while (this->current().type == StarToken || this->current().type == SlashToken) {
 		std::unique_ptr<Token> operator_token = std::make_unique<Token>(this->next());
 		std::unique_ptr<Expression> right = this->parse_primary();
 		std::unique_ptr<Expression> binary_expression(new BinaryExpression(std::move(left), std::move(operator_token), std::move(right)));
