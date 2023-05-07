@@ -5,17 +5,18 @@ Lexer::Lexer(const std::string text) {
 	this->position = 0;
 }
 
-std::vector<Token> Lexer::tokenize()
+std::vector<std::unique_ptr<Token>> Lexer::tokenize()
 {
-	std::vector<Token> tokens;
+	std::vector<std::unique_ptr<Token>> tokens;
 	while (this->position < this->text.size()) {
 		Token token = this->get_token();
 		if (this->is_token_skipable(token)) continue;
 
-		tokens.push_back(token);
+		tokens.push_back(std::make_unique<Token>(token));
 	}
 
-	tokens.push_back(Token(EndOfFileToken, this->position, "", nullptr));
+	Token end_of_file = Token(EndOfFileToken, this->position, "", nullptr);
+	tokens.push_back(std::make_unique<Token>(end_of_file));
 
 	return tokens;
 }
@@ -27,7 +28,7 @@ Token Lexer::get_token()
 		int length = this->eat_until(isdigit);
 		std::string raw = this->text.substr(start, length);
 		int value = stoi(raw);
-		return Token(NumericToken, start, raw, &value);
+		return Token(NumberToken, start, raw, std::make_any<int>(value));
 	}
 
 	if (isspace(this->current())) {
@@ -42,7 +43,7 @@ Token Lexer::get_token()
 	switch (current) {
 	case '+': return Token(PlusToken, this->next(), current, nullptr);
 	case '-': return Token(MinusToken, this->next(), current, nullptr);
-	case '*': return Token(StartToken, this->next(), current, nullptr);
+	case '*': return Token(StarToken, this->next(), current, nullptr);
 	case '/': return Token(SlashToken, this->next(), current, nullptr);
 	case '(': return Token(OpenParenthesisToken, this->next(), current, nullptr);
 	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);

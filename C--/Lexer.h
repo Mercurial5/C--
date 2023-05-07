@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Token.h"
 
@@ -9,7 +10,7 @@
 class Lexer {
 public:
 	Lexer(const std::string);
-	std::vector<Token> tokenize();
+	std::vector<std::unique_ptr<Token>> tokenize();
 
 private:
 	std::string text;
