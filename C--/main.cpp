@@ -36,6 +36,55 @@ map<int, string> EXPRESSION_TYPE_MAPPER = {
 	{ BadExpressionType, "BadExpressionType" }
 };
 
+void print_expression(unique_ptr<Expression> expression, string indent = "") {
+	cout << indent << EXPRESSION_TYPE_MAPPER[expression->type] << ':' << endl;
+	indent += '\t';
+
+	if (expression->type == NumberExpressionType) {
+		NumberExpression* number_expression_raw_ptr = dynamic_cast<NumberExpression*>(expression.get());
+
+		// Only if number expression is not nullptr (Dynamic cast was successfull)
+		if (number_expression_raw_ptr) {
+			// Remove pointer to the object to create new unique_ptr
+			expression.release();
+
+			unique_ptr<NumberExpression> number_expression(number_expression_raw_ptr);
+			cout << indent << number_expression->value << endl;
+		}
+	}
+	else if (expression->type == BinaryExpressionType) {
+		BinaryExpression* binary_expression_raw_ptr = dynamic_cast<BinaryExpression*>(expression.get());
+		
+		// Only if binary expression is not nullptr (Dynamic cast was successfull)
+		if (binary_expression_raw_ptr) {
+			// Remove pointer to the object to create new unique_ptr
+			expression.release();
+
+			unique_ptr<BinaryExpression> binary_expression(binary_expression_raw_ptr);
+			print_expression(std::move(binary_expression->left), indent);
+			cout << indent << "Operator Token:" << endl;
+			cout << indent + '\t' << binary_expression->operator_token->raw << endl;
+			print_expression(std::move(binary_expression->right), indent);
+		}
+	}
+	else if (expression->type == ParenthesizedExpressionType) {
+		ParenthesizedExpression* parenthesized_expression_raw_ptr = dynamic_cast<ParenthesizedExpression*>(expression.get());
+
+		// Only if parenthesized expression is not nullptr (Dynamic cast was successfull)
+		if (parenthesized_expression_raw_ptr) {
+			// Remove pointer to the object to create new unique_ptr
+			expression.release();
+
+			unique_ptr<ParenthesizedExpression> parenthesized_expression(parenthesized_expression_raw_ptr);
+			print_expression(std::move(parenthesized_expression->expression), indent);
+		}
+	}
+	else if (expression->type == BadExpressionType) {
+		cout << indent << "Bad Expression." << endl;
+	}
+}
+
+
 int main() {
 	while (true) {
 		string line;
@@ -43,11 +92,8 @@ int main() {
 		getline(cin, line);
 
 		Parser parser = Parser(line);
-		vector<unique_ptr<Expression>> expressions = parser.parse();
+		unique_ptr<Expression> expression = parser.parse();
 
-		cout << "Expressions:" << endl;
-		for (unique_ptr<Expression> &expression : expressions) {
-			cout << "\tExpression type - " << EXPRESSION_TYPE_MAPPER[expression->type] << endl;
-		}
+		print_expression(std::move(expression));
 	}
 }
