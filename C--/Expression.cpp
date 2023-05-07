@@ -3,3 +3,5 @@
 
 
 Expression::Expression(ExpressionType type) : type(type) {}
+
+Expression::~Expression() {};

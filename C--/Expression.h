@@ -7,5 +7,7 @@ public:
 	ExpressionType type;
 
 	Expression(ExpressionType);
+
+	virtual ~Expression();
 };
 
