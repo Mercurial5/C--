@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Frontend\Expressions">
       <UniqueIdentifier>{65d187de-f389-4bbd-b43b-91b6f0319f5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Backend">
+      <UniqueIdentifier>{784c1899-bcb1-46f2-a240-e8a2853c859d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Backend">
+      <UniqueIdentifier>{69de9ae2-6c63-4a54-b304-cd1b04469125}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Evaluator.cpp">
+      <Filter>Source Files\Backend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Evaluator.h">
+      <Filter>Header Files\Backend</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

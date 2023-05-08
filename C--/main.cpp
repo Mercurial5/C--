@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Parser.h"
+#include "Evaluator.h"
 
 #include "ExpressionType.h"
 #include "Expression.h"
@@ -92,8 +93,9 @@ int main() {
 		getline(cin, line);
 
 		Parser parser = Parser(line);
-		unique_ptr<Expression> expression = parser.parse();
+		unique_ptr<Expression> root = parser.parse();
+		Evaluator evaluator;
 
-		print_expression(std::move(expression));
+		cout << "= " << evaluator.evaluate_expression(move(root)) << endl;
 	}
 }
