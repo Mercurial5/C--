@@ -71,6 +71,10 @@ std::unique_ptr<Expression> Parser::parse_primary() {
 	}
 
 	Token bad_token = this->next();
+
+	std::string message = "Bad Token. Expected primary, got " + std::to_string(bad_token.type);
+	this->diagnostics.push_back(message);
+
 	return std::make_unique<BadExpression>(std::make_unique<Token>(bad_token));
 }
 
@@ -79,13 +83,24 @@ Token Parser::match(TokenType expression_type) {
 		return this->next();
 	}
 
+	std::string message = "Bad Token. Expected " + std::to_string(expression_type) + ", but instead got " + std::to_string(this->current().type);
+	this->diagnostics.push_back(message);
+
 	return Token(expression_type, 0, "", nullptr);
 }
 
 Token Parser::current() {
+	if (this->position >= this->tokens.size()) {
+		return *this->tokens[this->tokens.size() - 1];
+	}
+
 	return *this->tokens[this->position];
 }
 
 Token Parser::next() {
+	if (this->position >= this->tokens.size()) {
+		return *this->tokens[this->tokens.size() - 1];
+	}
+
 	return *this->tokens[this->position++];
 }

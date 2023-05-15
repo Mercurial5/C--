@@ -9,6 +9,8 @@
 
 class Lexer {
 public:
+	std::vector<std::string> diagnostics;
+
 	Lexer(const std::string);
 	std::vector<std::unique_ptr<Token>> tokenize();
 

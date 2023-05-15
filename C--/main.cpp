@@ -94,8 +94,17 @@ int main() {
 
 		Parser parser = Parser(line);
 		unique_ptr<Expression> root = parser.parse();
-		Evaluator evaluator;
 
-		cout << "= " << evaluator.evaluate_expression(move(root)) << endl;
+		if (parser.diagnostics.empty()) {
+			Evaluator evaluator;
+
+			cout << "= " << evaluator.evaluate_expression(move(root)) << endl;
+		}
+		else {
+			for (auto& diagnostic : parser.diagnostics) {
+				cout << diagnostic << endl;
+			}
+		}
+		
 	}
 }

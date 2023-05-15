@@ -13,6 +13,8 @@ class Parser {
 	std::vector<std::unique_ptr<Token>> tokens;
 	int position;
 public:
+	std::vector<std::string> diagnostics;
+
 	Parser(std::string);
 	std::unique_ptr<Expression> parse();
 
