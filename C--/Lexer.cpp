@@ -1,4 +1,10 @@
+#include <string>
+#include <vector>
+#include <memory>
+
+
 #include "Lexer.h"
+#include "Token.h"
 
 Lexer::Lexer(const std::string text) {
 	this->text = text;
@@ -49,6 +55,8 @@ Token Lexer::get_token()
 	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);
 	}
 
+	std::string message = "Bad character at position " + std::to_string(this->position);
+	this->diagnostics.push_back(message);
 	return Token(BadToken, this->next(), current, nullptr);
 }
 
