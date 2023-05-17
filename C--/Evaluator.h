@@ -8,5 +8,5 @@ private:
 	std::unique_ptr<Expression> root;
 public:
 	Evaluator();
-	int evaluate_expression(std::unique_ptr<Expression>);
+	int evaluate_expression(Expression*);
 };

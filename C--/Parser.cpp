@@ -22,9 +22,10 @@ Parser::Parser(std::string text) {
 	this->position = 0;
 }
 
-std::unique_ptr<Expression> Parser::parse() {
+std::shared_ptr<Expression> Parser::parse() {
 	std::unique_ptr<Expression> expression = this->parse_expression();
-	return std::move(expression);
+	std::shared_ptr<Expression> shared_ptr_exp = std::move(expression);
+	return shared_ptr_exp;
 }
 
 std::unique_ptr<Expression> Parser::parse_expression() {

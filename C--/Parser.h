@@ -16,7 +16,7 @@ public:
 	std::vector<std::string> diagnostics;
 
 	Parser(std::string);
-	std::unique_ptr<Expression> parse();
+	std::shared_ptr<Expression> parse();
 
 private:
 	std::unique_ptr<Expression> parse_expression();

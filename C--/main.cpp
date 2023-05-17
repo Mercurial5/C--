@@ -37,47 +37,35 @@ map<int, string> EXPRESSION_TYPE_MAPPER = {
 	{ BadExpressionType, "BadExpressionType" }
 };
 
-void print_expression(unique_ptr<Expression> expression, string indent = "") {
+void print_expression(Expression* expression, string indent = "") {
 	cout << indent << EXPRESSION_TYPE_MAPPER[expression->type] << ':' << endl;
 	indent += '\t';
 
 	if (expression->type == LiteralExpressionType) {
-		LiteralExpression* number_expression_raw_ptr = dynamic_cast<LiteralExpression*>(expression.get());
+		LiteralExpression* number_expression = dynamic_cast<LiteralExpression*>(expression);
 
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
-		if (number_expression_raw_ptr) {
-			// Remove pointer to the object to create new unique_ptr
-			expression.release();
-
-			unique_ptr<LiteralExpression> number_expression(number_expression_raw_ptr);
+		if (number_expression) {
 			cout << indent << std::any_cast<int>(number_expression->value) << endl;
 		}
 	}
 	else if (expression->type == BinaryExpressionType) {
-		BinaryExpression* binary_expression_raw_ptr = dynamic_cast<BinaryExpression*>(expression.get());
+		BinaryExpression* binary_expression = dynamic_cast<BinaryExpression*>(expression);
 		
 		// Only if binary expression is not nullptr (Dynamic cast was successfull)
-		if (binary_expression_raw_ptr) {
-			// Remove pointer to the object to create new unique_ptr
-			expression.release();
-
-			unique_ptr<BinaryExpression> binary_expression(binary_expression_raw_ptr);
-			print_expression(std::move(binary_expression->left), indent);
+		if (binary_expression) {
+			print_expression(binary_expression->left.get(), indent);
 			cout << indent << "Operator Token:" << endl;
 			cout << indent + '\t' << binary_expression->operator_token->raw << endl;
-			print_expression(std::move(binary_expression->right), indent);
+			print_expression(binary_expression->right.get(), indent);
 		}
 	}
 	else if (expression->type == ParenthesizedExpressionType) {
-		ParenthesizedExpression* parenthesized_expression_raw_ptr = dynamic_cast<ParenthesizedExpression*>(expression.get());
+		ParenthesizedExpression* parenthesized_expression = dynamic_cast<ParenthesizedExpression*>(expression);
 
 		// Only if parenthesized expression is not nullptr (Dynamic cast was successfull)
-		if (parenthesized_expression_raw_ptr) {
-			// Remove pointer to the object to create new unique_ptr
-			expression.release();
-
-			unique_ptr<ParenthesizedExpression> parenthesized_expression(parenthesized_expression_raw_ptr);
-			print_expression(std::move(parenthesized_expression->expression), indent);
+		if (parenthesized_expression) {
+			print_expression(parenthesized_expression->expression.get(), indent);
 		}
 	}
 	else if (expression->type == BadExpressionType) {
@@ -93,14 +81,14 @@ int main() {
 		getline(cin, line);
 
 		Parser parser = Parser(line);
-		unique_ptr<Expression> root = parser.parse();
+		std::shared_ptr<Expression> root = parser.parse();
 
 		if (parser.diagnostics.empty()) {
 			Evaluator evaluator;
 
-			print_expression(move(root));
+			print_expression(root.get());
 
-			//cout << "= " << evaluator.evaluate_expression(move(root)) << endl;
+			cout << "= " << evaluator.evaluate_expression(root.get()) << endl;
 		}
 		else {
 			for (auto& diagnostic : parser.diagnostics) {
