@@ -2,7 +2,7 @@
 
 
 enum ExpressionType {
-	NumberExpressionType,
+	LiteralExpressionType,
 	BinaryExpressionType,
 	ParenthesizedExpressionType,
 	BadExpressionType

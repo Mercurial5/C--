@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <any>
 
 #include "Token.h"
 
@@ -8,13 +9,11 @@
 #include "ExpressionType.h"
 
 
-class NumberExpression : public Expression {
+class LiteralExpression : public Expression {
 
 public:
 	std::unique_ptr<Token> number_token;
-	int value;
+	std::any value;
 
-	NumberExpression(std::unique_ptr<Token>);
-
+	LiteralExpression(std::unique_ptr<Token>);	
 };
-

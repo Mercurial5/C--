@@ -134,7 +134,7 @@
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NumberExpression.cpp" />
+    <ClCompile Include="LiteralExpression.cpp" />
     <ClCompile Include="ParenthesizedExpression.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Token.cpp" />
@@ -146,7 +146,7 @@
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionType.h" />
     <ClInclude Include="Lexer.h" />
-    <ClInclude Include="NumberExpression.h" />
+    <ClInclude Include="LiteralExpression.h" />
     <ClInclude Include="ParenthesizedExpression.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Token.h" />
