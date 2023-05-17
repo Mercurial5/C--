@@ -15,6 +15,8 @@
 #include "Token.h"
 #include "TokenType.h"
 
+#include "ParserRules.h"
+
 
 Parser::Parser(std::string text) {
 	Lexer lexer = Lexer(text);
@@ -27,37 +29,26 @@ std::unique_ptr<Expression> Parser::parse() {
 	return std::move(expression);
 }
 
-std::unique_ptr<Expression> Parser::parse_expression() {
-	std::unique_ptr<Expression> expression = this->parse_term();
-
-	return expression;
-}
-
-std::unique_ptr<Expression> Parser::parse_term() {
-	std::unique_ptr<Expression> left = this->parse_factor();
-
-	while (this->current().type == PlusToken || this->current().type == MinusToken) {
-		std::unique_ptr<Token> operator_token = std::make_unique<Token>(this->next());
-		std::unique_ptr<Expression> right = this->parse_factor();
-		left = std::make_unique<BinaryExpression>(std::move(left), std::move(operator_token), std::move(right));
-	}
-
-	return left;
-}
-
-std::unique_ptr<Expression> Parser::parse_factor() {
+std::unique_ptr<Expression> Parser::parse_expression(int parent_precedence) {
 	std::unique_ptr<Expression> left = this->parse_primary();
 
-	while (this->current().type == StarToken || this->current().type == SlashToken) {
+	while (true) {
+		int precedence = ParserRules::get_binary_operator_precedence(this->current().type);
+
+		if (precedence == 0 || precedence <= parent_precedence) {
+			break;
+		}
+
 		std::unique_ptr<Token> operator_token = std::make_unique<Token>(this->next());
-		std::unique_ptr<Expression> right = this->parse_primary();
+		std::unique_ptr<Expression> right = this->parse_expression(precedence);
+
 		std::unique_ptr<Expression> binary_expression(new BinaryExpression(std::move(left), std::move(operator_token), std::move(right)));
-		left = std::move(binary_expression); // move the BinaryExpression object to the left Expression object
+		left = std::move(binary_expression);
 	}
 
 	return left;
 }
-
+ 
 std::unique_ptr<Expression> Parser::parse_primary() {
 	if (this->current().type == NumberToken) {
 		return std::make_unique<LiteralExpression>(std::make_unique<Token>(this->next()));
