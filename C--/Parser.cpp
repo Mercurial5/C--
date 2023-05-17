@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Expression.h"
-#include "NumberExpression.h"
+#include "LiteralExpression.h"
 #include "ParenthesizedExpression.h"
 #include "BinaryExpression.h"
 #include "BadExpression.h"
@@ -60,7 +60,7 @@ std::unique_ptr<Expression> Parser::parse_factor() {
 
 std::unique_ptr<Expression> Parser::parse_primary() {
 	if (this->current().type == NumberToken) {
-		return std::make_unique<NumberExpression>(std::make_unique<Token>(this->next()));
+		return std::make_unique<LiteralExpression>(std::make_unique<Token>(this->next()));
 	}
 
 	if (this->current().type == OpenParenthesisToken) {

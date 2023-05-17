@@ -9,7 +9,7 @@
 #include "TokenType.h"
 
 #include "BinaryExpression.h"
-#include "NumberExpression.h"
+#include "LiteralExpression.h"
 #include "ParenthesizedExpression.h"
 
 
@@ -17,16 +17,16 @@ Evaluator::Evaluator() {}
 
 
 int Evaluator::evaluate_expression(std::unique_ptr<Expression> expression) {
-	if (expression->type == NumberExpressionType) {
-		NumberExpression* number_expression_raw_ptr = dynamic_cast<NumberExpression*>(expression.get());
+	if (expression->type == LiteralExpressionType) {
+		LiteralExpression* number_expression_raw_ptr = dynamic_cast<LiteralExpression*>(expression.get());
 
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
 		if (number_expression_raw_ptr) {
 			// Remove pointer to the object to create new unique_ptr
 			expression.release();
 
-			std::unique_ptr<NumberExpression> number_expression(number_expression_raw_ptr);
-			return number_expression->value;
+			std::unique_ptr<LiteralExpression> number_expression(number_expression_raw_ptr);
+			return std::any_cast<int>(number_expression->value);
 		}
 	}
 

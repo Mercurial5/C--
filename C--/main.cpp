@@ -6,7 +6,7 @@
 
 #include "ExpressionType.h"
 #include "Expression.h"
-#include "NumberExpression.h"
+#include "LiteralExpression.h"
 #include "BinaryExpression.h"
 #include "ParenthesizedExpression.h"
 
@@ -31,7 +31,7 @@ map<int, string> TOKEN_TYPE_MAPPER = {
 };
 
 map<int, string> EXPRESSION_TYPE_MAPPER = {
-	{ NumberExpressionType, "NumberExpressionType" },
+	{ LiteralExpressionType, "LiteralExpressionType" },
 	{ BinaryExpressionType, "BinaryExpressionType" },
 	{ ParenthesizedExpressionType, "ParenthesizedExpressionType" },
 	{ BadExpressionType, "BadExpressionType" }
@@ -41,16 +41,16 @@ void print_expression(unique_ptr<Expression> expression, string indent = "") {
 	cout << indent << EXPRESSION_TYPE_MAPPER[expression->type] << ':' << endl;
 	indent += '\t';
 
-	if (expression->type == NumberExpressionType) {
-		NumberExpression* number_expression_raw_ptr = dynamic_cast<NumberExpression*>(expression.get());
+	if (expression->type == LiteralExpressionType) {
+		LiteralExpression* number_expression_raw_ptr = dynamic_cast<LiteralExpression*>(expression.get());
 
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
 		if (number_expression_raw_ptr) {
 			// Remove pointer to the object to create new unique_ptr
 			expression.release();
 
-			unique_ptr<NumberExpression> number_expression(number_expression_raw_ptr);
-			cout << indent << number_expression->value << endl;
+			unique_ptr<LiteralExpression> number_expression(number_expression_raw_ptr);
+			cout << indent << std::any_cast<int>(number_expression->value) << endl;
 		}
 	}
 	else if (expression->type == BinaryExpressionType) {
@@ -98,7 +98,9 @@ int main() {
 		if (parser.diagnostics.empty()) {
 			Evaluator evaluator;
 
-			cout << "= " << evaluator.evaluate_expression(move(root)) << endl;
+			print_expression(move(root));
+
+			//cout << "= " << evaluator.evaluate_expression(move(root)) << endl;
 		}
 		else {
 			for (auto& diagnostic : parser.diagnostics) {
