@@ -37,12 +37,12 @@ map<int, string> EXPRESSION_TYPE_MAPPER = {
 	{ BadExpressionType, "BadExpressionType" }
 };
 
-void print_expression(Expression* expression, string indent = "") {
+void print_expression(shared_ptr<Expression> expression, string indent = "") {
 	cout << indent << EXPRESSION_TYPE_MAPPER[expression->type] << ':' << endl;
 	indent += '\t';
 
 	if (expression->type == LiteralExpressionType) {
-		LiteralExpression* number_expression = dynamic_cast<LiteralExpression*>(expression);
+		shared_ptr<LiteralExpression> number_expression = dynamic_pointer_cast<LiteralExpression>(expression);
 
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
 		if (number_expression) {
@@ -50,22 +50,22 @@ void print_expression(Expression* expression, string indent = "") {
 		}
 	}
 	else if (expression->type == BinaryExpressionType) {
-		BinaryExpression* binary_expression = dynamic_cast<BinaryExpression*>(expression);
+		shared_ptr<BinaryExpression> binary_expression = dynamic_pointer_cast<BinaryExpression>(expression);
 		
 		// Only if binary expression is not nullptr (Dynamic cast was successfull)
 		if (binary_expression) {
-			print_expression(binary_expression->left.get(), indent);
+			print_expression(binary_expression->left, indent);
 			cout << indent << "Operator Token:" << endl;
 			cout << indent + '\t' << binary_expression->operator_token->raw << endl;
-			print_expression(binary_expression->right.get(), indent);
+			print_expression(binary_expression->right, indent);
 		}
 	}
 	else if (expression->type == ParenthesizedExpressionType) {
-		ParenthesizedExpression* parenthesized_expression = dynamic_cast<ParenthesizedExpression*>(expression);
+		shared_ptr<ParenthesizedExpression> parenthesized_expression = dynamic_pointer_cast<ParenthesizedExpression>(expression);
 
 		// Only if parenthesized expression is not nullptr (Dynamic cast was successfull)
 		if (parenthesized_expression) {
-			print_expression(parenthesized_expression->expression.get(), indent);
+			print_expression(parenthesized_expression->expression, indent);
 		}
 	}
 	else if (expression->type == BadExpressionType) {
@@ -86,9 +86,9 @@ int main() {
 		if (parser.diagnostics.empty()) {
 			Evaluator evaluator;
 
-			print_expression(root.get());
+			print_expression(root);
 
-			cout << "= " << evaluator.evaluate_expression(root.get()) << endl;
+			cout << "= " << evaluator.evaluate_expression(root) << endl;
 		}
 		else {
 			for (auto& diagnostic : parser.diagnostics) {
