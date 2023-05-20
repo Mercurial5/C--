@@ -137,6 +137,7 @@
     <ClCompile Include="LiteralExpression.cpp" />
     <ClCompile Include="ParenthesizedExpression.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParserRules.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="LiteralExpression.h" />
     <ClInclude Include="ParenthesizedExpression.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="ParserRules.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
