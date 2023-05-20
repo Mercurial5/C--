@@ -8,6 +8,6 @@
 #include "Token.h"
 
 
-BadExpression::BadExpression(std::unique_ptr<Token> token) : Expression(BadExpressionType) {
-	this->token = std::move(token);
+BadExpression::BadExpression(std::shared_ptr<Token> token) : Expression(BadExpressionType) {
+	this->token = token;
 }

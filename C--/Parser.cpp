@@ -22,52 +22,53 @@ Parser::Parser(std::string text) {
 	this->position = 0;
 }
 
-std::unique_ptr<Expression> Parser::parse() {
-	std::unique_ptr<Expression> expression = this->parse_expression();
-	return std::move(expression);
+std::shared_ptr<Expression> Parser::parse() {
+	std::shared_ptr<Expression> expression = this->parse_expression();
+	
+	return expression;
 }
 
-std::unique_ptr<Expression> Parser::parse_expression() {
-	std::unique_ptr<Expression> expression = this->parse_term();
+std::shared_ptr<Expression> Parser::parse_expression() {
+	std::shared_ptr<Expression> expression = this->parse_term();
 
 	return expression;
 }
 
-std::unique_ptr<Expression> Parser::parse_term() {
-	std::unique_ptr<Expression> left = this->parse_factor();
+std::shared_ptr<Expression> Parser::parse_term() {
+	std::shared_ptr<Expression> left = this->parse_factor();
 
 	while (this->current().type == PlusToken || this->current().type == MinusToken) {
-		std::unique_ptr<Token> operator_token = std::make_unique<Token>(this->next());
-		std::unique_ptr<Expression> right = this->parse_factor();
-		left = std::make_unique<BinaryExpression>(std::move(left), std::move(operator_token), std::move(right));
+		std::shared_ptr<Token> operator_token = std::make_shared<Token>(this->next());
+		std::shared_ptr<Expression> right = this->parse_factor();
+		left = std::make_shared<BinaryExpression>(left, operator_token, right);
 	}
 
 	return left;
 }
 
-std::unique_ptr<Expression> Parser::parse_factor() {
-	std::unique_ptr<Expression> left = this->parse_primary();
+std::shared_ptr<Expression> Parser::parse_factor() {
+	std::shared_ptr<Expression> left = this->parse_primary();
 
 	while (this->current().type == StarToken || this->current().type == SlashToken) {
-		std::unique_ptr<Token> operator_token = std::make_unique<Token>(this->next());
-		std::unique_ptr<Expression> right = this->parse_primary();
-		std::unique_ptr<Expression> binary_expression(new BinaryExpression(std::move(left), std::move(operator_token), std::move(right)));
-		left = std::move(binary_expression); // move the BinaryExpression object to the left Expression object
+		std::shared_ptr<Token> operator_token = std::make_shared<Token>(this->next());
+		std::shared_ptr<Expression> right = this->parse_primary();
+		std::shared_ptr<Expression> binary_expression(new BinaryExpression(left, operator_token, right));
+		left = binary_expression; // move the BinaryExpression object to the left Expression object
 	}
 
 	return left;
 }
 
-std::unique_ptr<Expression> Parser::parse_primary() {
+std::shared_ptr<Expression> Parser::parse_primary() {
 	if (this->current().type == NumberToken) {
-		return std::make_unique<LiteralExpression>(std::make_unique<Token>(this->next()));
+		return std::make_shared<LiteralExpression>(std::make_shared<Token>(this->next()));
 	}
 
 	if (this->current().type == OpenParenthesisToken) {
 		Token open = this->next();
-		std::unique_ptr<Expression> expression = this->parse_expression();
+		std::shared_ptr<Expression> expression = this->parse_expression();
 		Token close = this->match(CloseParenthesisToken);
-		return std::make_unique<ParenthesizedExpression>(std::make_unique<Token>(open), std::move(expression), std::make_unique<Token>(close));
+		return std::make_shared<ParenthesizedExpression>(std::make_shared<Token>(open), expression, std::make_shared<Token>(close));
 	}
 
 	Token bad_token = this->next();
@@ -75,7 +76,7 @@ std::unique_ptr<Expression> Parser::parse_primary() {
 	std::string message = "Bad Token. Expected primary, got " + std::to_string(bad_token.type);
 	this->diagnostics.push_back(message);
 
-	return std::make_unique<BadExpression>(std::make_unique<Token>(bad_token));
+	return std::make_shared<BadExpression>(std::make_shared<Token>(bad_token));
 }
 
 Token Parser::match(TokenType expression_type) {

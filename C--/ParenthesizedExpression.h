@@ -7,9 +7,9 @@
 
 class ParenthesizedExpression : public Expression {
 public:
-	std::unique_ptr<Token> open_token;
-	std::unique_ptr<Expression> expression;
-	std::unique_ptr<Token> close_token;
+	std::shared_ptr<Token> open_token;
+	std::shared_ptr<Expression> expression;
+	std::shared_ptr<Token> close_token;
 
-	ParenthesizedExpression(std::unique_ptr<Token>, std::unique_ptr<Expression>, std::unique_ptr<Token>);
+	ParenthesizedExpression(std::shared_ptr<Token>, std::shared_ptr<Expression>, std::shared_ptr<Token>);
 };

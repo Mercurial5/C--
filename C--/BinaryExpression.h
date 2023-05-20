@@ -9,9 +9,9 @@
 
 class BinaryExpression : public Expression {
 public:
-	std::unique_ptr<Expression> left;
-	std::unique_ptr<Expression> right;
-	std::unique_ptr<Token> operator_token;
+	std::shared_ptr<Expression> left;
+	std::shared_ptr<Expression> right;
+	std::shared_ptr<Token> operator_token;
 
-	BinaryExpression(std::unique_ptr<Expression>, std::unique_ptr<Token>, std::unique_ptr<Expression>);
+	BinaryExpression(std::shared_ptr<Expression>, std::shared_ptr<Token>, std::shared_ptr<Expression>);
 };
