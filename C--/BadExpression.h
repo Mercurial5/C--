@@ -8,7 +8,7 @@
 #include "Token.h"
 
 class BadExpression : public Expression {
-	std::unique_ptr<Token> token;
+	std::shared_ptr<Token> token;
 public:
-	BadExpression(std::unique_ptr<Token>);
+	BadExpression(std::shared_ptr<Token>);
 };

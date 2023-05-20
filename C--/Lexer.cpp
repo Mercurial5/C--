@@ -11,18 +11,18 @@ Lexer::Lexer(const std::string text) {
 	this->position = 0;
 }
 
-std::vector<std::unique_ptr<Token>> Lexer::tokenize()
+std::vector<std::shared_ptr<Token>> Lexer::tokenize()
 {
-	std::vector<std::unique_ptr<Token>> tokens;
+	std::vector<std::shared_ptr<Token>> tokens;
 	while (this->position < this->text.size()) {
 		Token token = this->get_token();
 		if (this->is_token_skipable(token)) continue;
 
-		tokens.push_back(std::make_unique<Token>(token));
+		tokens.push_back(std::make_shared<Token>(token));
 	}
 
 	Token end_of_file = Token(EndOfFileToken, this->position, "", nullptr);
-	tokens.push_back(std::make_unique<Token>(end_of_file));
+	tokens.push_back(std::make_shared<Token>(end_of_file));
 
 	return tokens;
 }
