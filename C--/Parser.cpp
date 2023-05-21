@@ -4,9 +4,11 @@
 #include <iostream>
 
 #include "Expression.h"
+
 #include "LiteralExpression.h"
-#include "ParenthesizedExpression.h"
+#include "UnaryExpression.h"
 #include "BinaryExpression.h"
+#include "ParenthesizedExpression.h"
 #include "BadExpression.h"
 
 #include "Lexer.h"
@@ -14,6 +16,8 @@
 
 #include "Token.h"
 #include "TokenType.h"
+
+#include "ParserRules.h"
 
 
 Parser::Parser(std::string text) {
@@ -28,32 +32,33 @@ std::shared_ptr<Expression> Parser::parse() {
 	return expression;
 }
 
-std::shared_ptr<Expression> Parser::parse_expression() {
-	std::shared_ptr<Expression> expression = this->parse_term();
+std::shared_ptr<Expression> Parser::parse_expression(int parent_precedence) {
+	int unary_operator_precedence = ParserRules::get_unary_operator_precedence(this->current().type);
 
-	return expression;
-}
-
-std::shared_ptr<Expression> Parser::parse_term() {
-	std::shared_ptr<Expression> left = this->parse_factor();
-
-	while (this->current().type == PlusToken || this->current().type == MinusToken) {
+	std::shared_ptr<Expression> left;
+	if (unary_operator_precedence >= parent_precedence && unary_operator_precedence != 0) {
 		std::shared_ptr<Token> operator_token = std::make_shared<Token>(this->next());
-		std::shared_ptr<Expression> right = this->parse_factor();
-		left = std::make_shared<BinaryExpression>(left, operator_token, right);
+		std::shared_ptr<Expression> expression = this->parse_expression(unary_operator_precedence);
+		std::shared_ptr<Expression> unary_expression(new UnaryExpression(operator_token, expression));
+		left = unary_expression;
+	}
+	else {
+		left = this->parse_primary();
 	}
 
-	return left;
-}
 
-std::shared_ptr<Expression> Parser::parse_factor() {
-	std::shared_ptr<Expression> left = this->parse_primary();
+	while (true) {
+		int precedence = ParserRules::get_binary_operator_precedence(this->current().type);
 
-	while (this->current().type == StarToken || this->current().type == SlashToken) {
+		if (precedence == 0 || precedence <= parent_precedence) {
+			break;
+		}
+
 		std::shared_ptr<Token> operator_token = std::make_shared<Token>(this->next());
-		std::shared_ptr<Expression> right = this->parse_primary();
+		std::shared_ptr<Expression> right = this->parse_expression(precedence);
+
 		std::shared_ptr<Expression> binary_expression(new BinaryExpression(left, operator_token, right));
-		left = binary_expression; // move the BinaryExpression object to the left Expression object
+		left = binary_expression;
 	}
 
 	return left;

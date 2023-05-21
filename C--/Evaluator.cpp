@@ -8,6 +8,7 @@
 
 #include "TokenType.h"
 
+#include "UnaryExpression.h"
 #include "BinaryExpression.h"
 #include "LiteralExpression.h"
 #include "ParenthesizedExpression.h"
@@ -20,9 +21,24 @@ int Evaluator::evaluate_expression(std::shared_ptr<Expression> expression) {
 	if (expression->type == LiteralExpressionType) {
 		std::shared_ptr<LiteralExpression> number_expression = std::dynamic_pointer_cast<LiteralExpression>(expression);
 
-		// Only if number expression is not nullptr (Dynamic cast was successfull)
+		// Only if literal expression is not nullptr (Dynamic cast was successfull)
 		if (number_expression) {
 			return std::any_cast<int>(number_expression->value);
+		}
+	}
+
+	if (expression->type == UnaryExpressionType) {
+		std::shared_ptr<UnaryExpression> unary_expression = std::dynamic_pointer_cast<UnaryExpression>(expression);
+
+		// Only if unary expression is not nullptr (Dynamic cast was successfull)
+		if (unary_expression) {
+			int result = this->evaluate_expression(unary_expression->expression);
+			std::shared_ptr<Token> operator_token = unary_expression->operator_token;
+
+			switch (operator_token->type) {
+			case MinusToken: return -result;
+			case PlusToken: return result;
+			}
 		}
 	}
 

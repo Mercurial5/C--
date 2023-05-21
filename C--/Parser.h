@@ -19,9 +19,7 @@ public:
 	std::shared_ptr<Expression> parse();
 
 private:
-	std::shared_ptr<Expression> parse_expression();
-	std::shared_ptr<Expression> parse_term();
-	std::shared_ptr<Expression> parse_factor();
+	std::shared_ptr<Expression> parse_expression(int = 0);
 	std::shared_ptr<Expression> parse_primary();
 
 	Token match(TokenType);
