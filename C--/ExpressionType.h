@@ -7,7 +7,5 @@ enum ExpressionType {
 	BinaryExpressionType,
 	ParenthesizedExpressionType,
 
-	BadExpressionType,
-	// Expressions MUST use this ONLY when they are not assigned to a value yet. 
-	EmptyExpressionType 
+	BadExpressionType
 };

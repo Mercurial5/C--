@@ -48,9 +48,6 @@
     <ClCompile Include="BinaryExpression.cpp">
       <Filter>Source Files\Frontend\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="NumberExpression.cpp">
-      <Filter>Source Files\Frontend\Expressions</Filter>
-    </ClCompile>
     <ClCompile Include="ParenthesizedExpression.cpp">
       <Filter>Source Files\Frontend\Expressions</Filter>
     </ClCompile>
@@ -62,6 +59,15 @@
     </ClCompile>
     <ClCompile Include="Evaluator.cpp">
       <Filter>Source Files\Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="UnaryExpression.cpp">
+      <Filter>Source Files\Frontend\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ParserRules.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="LiteralExpression.cpp">
+      <Filter>Source Files\Frontend\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,9 +86,6 @@
     <ClInclude Include="ExpressionType.h">
       <Filter>Header Files\Frontend\Expressions</Filter>
     </ClInclude>
-    <ClInclude Include="NumberExpression.h">
-      <Filter>Header Files\Frontend\Expressions</Filter>
-    </ClInclude>
     <ClInclude Include="BinaryExpression.h">
       <Filter>Header Files\Frontend\Expressions</Filter>
     </ClInclude>
@@ -97,6 +100,15 @@
     </ClInclude>
     <ClInclude Include="Evaluator.h">
       <Filter>Header Files\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="UnaryExpression.h">
+      <Filter>Header Files\Frontend\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="LiteralExpression.h">
+      <Filter>Header Files\Frontend\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ParserRules.h">
+      <Filter>Header Files\Frontend</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
