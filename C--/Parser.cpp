@@ -4,9 +4,11 @@
 #include <iostream>
 
 #include "Expression.h"
+
 #include "LiteralExpression.h"
-#include "ParenthesizedExpression.h"
+#include "UnaryExpression.h"
 #include "BinaryExpression.h"
+#include "ParenthesizedExpression.h"
 #include "BadExpression.h"
 
 #include "Lexer.h"
@@ -31,7 +33,19 @@ std::shared_ptr<Expression> Parser::parse() {
 }
 
 std::shared_ptr<Expression> Parser::parse_expression(int parent_precedence) {
-	std::shared_ptr<Expression> left = this->parse_primary();
+	int unary_operator_precedence = ParserRules::get_unary_operator_precedence(this->current().type);
+
+	std::shared_ptr<Expression> left;
+	if (unary_operator_precedence >= parent_precedence && unary_operator_precedence != 0) {
+		std::shared_ptr<Token> operator_token = std::make_shared<Token>(this->next());
+		std::shared_ptr<Expression> expression = this->parse_expression(unary_operator_precedence);
+		std::shared_ptr<Expression> unary_expression(new UnaryExpression(operator_token, expression));
+		left = unary_expression;
+	}
+	else {
+		left = this->parse_primary();
+	}
+
 
 	while (true) {
 		int precedence = ParserRules::get_binary_operator_precedence(this->current().type);
