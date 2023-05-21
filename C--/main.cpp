@@ -6,7 +6,9 @@
 
 #include "ExpressionType.h"
 #include "Expression.h"
+
 #include "LiteralExpression.h"
+#include "UnaryExpression.h"
 #include "BinaryExpression.h"
 #include "ParenthesizedExpression.h"
 
@@ -32,6 +34,7 @@ map<int, string> TOKEN_TYPE_MAPPER = {
 
 map<int, string> EXPRESSION_TYPE_MAPPER = {
 	{ LiteralExpressionType, "LiteralExpressionType" },
+	{ UnaryExpressionType, "UnaryExpressionType" },
 	{ BinaryExpressionType, "BinaryExpressionType" },
 	{ ParenthesizedExpressionType, "ParenthesizedExpressionType" },
 	{ BadExpressionType, "BadExpressionType" }
@@ -47,6 +50,15 @@ void print_expression(shared_ptr<Expression> expression, string indent = "") {
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
 		if (number_expression) {
 			cout << indent << std::any_cast<int>(number_expression->value) << endl;
+		}
+	}
+	else if (expression->type == UnaryExpressionType) {
+		shared_ptr<UnaryExpression> unary_expression = dynamic_pointer_cast<UnaryExpression>(expression);
+
+		if (unary_expression) {
+			cout << indent << "Operator Token:" << endl;
+			cout << indent << '\t' << unary_expression->operator_token->raw << endl;
+			print_expression(unary_expression->expression, indent);
 		}
 	}
 	else if (expression->type == BinaryExpressionType) {

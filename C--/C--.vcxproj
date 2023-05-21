@@ -139,6 +139,7 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserRules.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="UnaryExpression.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BadExpression.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="ParserRules.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
+    <ClInclude Include="UnaryExpression.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
