@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <any>
 
 #include "Parser.h"
 #include "Binder.h"
@@ -29,28 +30,33 @@ int main() {
 		Binder binder = Binder(line);
 		std::shared_ptr<BoundExpression> root = binder.bind();
 
-		if (binder.diagnostics.empty()) {
-			//Utilities::print_expression(root);
-
-			Evaluator evaluator;
-			std::any result = evaluator.evaluate_expression(root);
-
-			if (result.type() == typeid(bool)) {
-				std::cout << "= " << std::boolalpha << std::any_cast<bool>(result) << std::endl;
-			}
-			else if (result.type() == typeid(int)) {
-				std::cout << "= " << std::any_cast<int>(result) << std::endl;
-			}
-			else {
-				std::cout << "This type is not supported" << std::endl;
-			}
-
-		}
-		else {
+		if (!binder.diagnostics.empty()) {
 			for (auto& diagnostic : binder.diagnostics) {
 				std::cout << diagnostic << std::endl;
 			}
+			continue;
 		}
 
+		//Utilities::print_expression(root);
+
+		Evaluator evaluator;
+		std::any result = evaluator.evaluate_expression(root);
+
+		if (!evaluator.diagnostics.empty()) {
+			for (auto& diagnostic : evaluator.diagnostics) {
+				std::cout << diagnostic << std::endl;
+			}
+			continue;
+		}
+
+		if (result.type() == typeid(bool)) {
+			std::cout << "= " << std::boolalpha << std::any_cast<bool>(result) << std::endl;
+		}
+		else if (result.type() == typeid(int)) {
+			std::cout << "= " << std::any_cast<int>(result) << std::endl;
+		}
+		else {
+			std::cout << "This type is not supported" << std::endl;
+		}
 	}
 }
