@@ -5,7 +5,7 @@
 int ParserRules::get_unary_operator_precedence(TokenType token_type) {
 	switch (token_type)
 	{
-	case ExclamationMarkToken:
+	case ExclamationToken:
 	case PlusToken:
 	case MinusToken:
 		return 5;

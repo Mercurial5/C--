@@ -94,7 +94,7 @@ std::optional<BoundUnaryOperatorType> Binder::bind_unary_operator_type(std::shar
 	else if (type == typeid(bool)) {
 		switch (operator_token->type)
 		{
-		case ExclamationMarkToken:
+		case ExclamationToken:
 			return LogicalNegation;
 		default:
 			throw std::invalid_argument("Unexpected operator_token type in bind_unary_operator_type");

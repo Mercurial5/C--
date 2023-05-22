@@ -23,7 +23,7 @@ std::map<int, std::string> Utilities::TOKEN_TYPE_MAPPER = {
 	{MinusToken, "MinusToken"},
 	{StarToken, "StarToken"},
 	{SlashToken, "SlashToken"},
-	{ExclamationMarkToken, "ExclamationMarkToken"},
+	{ExclamationToken, "ExclamationMarkToken"},
 	{AmpersandAmpersandToken, "AmpersandAmpersandToken"},
 	{PipePipeToken, "PipePipeToken"},
 	{OpenParenthesisToken, "OpenParenthesisToken"},

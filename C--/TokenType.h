@@ -19,7 +19,7 @@ enum TokenType {
 	SlashToken,
 
 	// Logical operators
-	ExclamationMarkToken,
+	ExclamationToken,
 	AmpersandAmpersandToken,
 	PipePipeToken,
 
