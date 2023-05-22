@@ -70,11 +70,11 @@ void Utilities::print_expression(std::shared_ptr<Expression> expression, std::st
 	indent += '\t';
 
 	if (expression->type == LiteralExpressionType) {
-		std::shared_ptr<LiteralExpression> number_expression = dynamic_pointer_cast<LiteralExpression>(expression);
+		std::shared_ptr<LiteralExpression> literal_expression = dynamic_pointer_cast<LiteralExpression>(expression);
 
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
-		if (number_expression) {
-			std::cout << indent << std::any_cast<int>(number_expression->number_token->value) << std::endl;
+		if (literal_expression) {
+			std::cout << indent << literal_expression->token->raw << std::endl;
 		}
 	}
 	else if (expression->type == UnaryExpressionType) {
