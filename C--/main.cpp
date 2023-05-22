@@ -33,13 +33,24 @@ int main() {
 			//Utilities::print_expression(root);
 
 			Evaluator evaluator;
-			std::cout << "= " << evaluator.evaluate_expression(root) << std::endl;
+			std::any result = evaluator.evaluate_expression(root);
+
+			if (result.type() == typeid(bool)) {
+				std::cout << "= " << std::boolalpha << std::any_cast<bool>(result) << std::endl;
+			}
+			else if (result.type() == typeid(int)) {
+				std::cout << "= " << std::any_cast<int>(result) << std::endl;
+			}
+			else {
+				std::cout << "This type is not supported" << std::endl;
+			}
+
 		}
 		else {
 			for (auto& diagnostic : binder.diagnostics) {
 				std::cout << diagnostic << std::endl;
 			}
 		}
-		
+
 	}
 }
