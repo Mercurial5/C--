@@ -6,6 +6,11 @@
 enum TokenType {
 	NumberToken,
 
+	TrueKeywordToken,
+	FalseKeywordToken,
+
+	IdentifierToken,
+
 	PlusToken,
 	MinusToken,
 	StarToken,
