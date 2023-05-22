@@ -46,7 +46,7 @@ std::shared_ptr<BoundExpression> Binder::bind_literal_expression(std::shared_ptr
 		throw std::invalid_argument("Received null expression in bind_literal_expression");
 	}
 
-	return std::make_shared<BoundLiteralExpression>(expression->number_token->value);
+	return std::make_shared<BoundLiteralExpression>(expression->value);
 }
 
 std::shared_ptr<BoundExpression> Binder::bind_unary_expression(std::shared_ptr<UnaryExpression> expression) {
