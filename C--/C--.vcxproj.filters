@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Backend">
       <UniqueIdentifier>{69de9ae2-6c63-4a54-b304-cd1b04469125}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Frontend\Binding">
+      <UniqueIdentifier>{e1a1c759-5a81-4cd8-8363-da0b91a5d7af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Binding">
+      <UniqueIdentifier>{74ed0870-35c4-4e7c-837d-06117a52ab69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,6 +74,24 @@
     </ClCompile>
     <ClCompile Include="LiteralExpression.cpp">
       <Filter>Source Files\Frontend\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Binder.cpp">
+      <Filter>Source Files\Frontend\Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundBinaryExpression.cpp">
+      <Filter>Source Files\Frontend\Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundExpression.cpp">
+      <Filter>Source Files\Frontend\Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundLiteralExpression.cpp">
+      <Filter>Source Files\Frontend\Binding</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundUnaryExpression.cpp">
+      <Filter>Source Files\Frontend\Binding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +133,33 @@
     </ClInclude>
     <ClInclude Include="ParserRules.h">
       <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundUnaryOperatorType.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="Binder.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundBinaryExpression.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundBinaryOperatorType.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundExpression.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundExpressionType.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundLiteralExpression.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundUnaryExpression.h">
+      <Filter>Header Files\Frontend\Binding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

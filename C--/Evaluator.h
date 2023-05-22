@@ -1,12 +1,10 @@
 #pragma once
 #include <memory>
 
-#include "Expression.h"
+#include "BoundExpression.h"
 
 class Evaluator {
-private:
-	std::shared_ptr<Expression> root;
 public:
 	Evaluator();
-	int evaluate_expression(std::shared_ptr<Expression>);
+	int evaluate_expression(std::shared_ptr<BoundExpression>);
 };

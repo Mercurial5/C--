@@ -23,12 +23,13 @@
 Parser::Parser(std::string text) {
 	Lexer lexer = Lexer(text);
 	this->tokens = lexer.tokenize();
+	this->diagnostics = lexer.diagnostics;
 	this->position = 0;
 }
 
 std::shared_ptr<Expression> Parser::parse() {
 	std::shared_ptr<Expression> expression = this->parse_expression();
-	
+
 	return expression;
 }
 

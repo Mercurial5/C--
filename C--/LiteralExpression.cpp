@@ -8,6 +8,5 @@
 #include "Token.h"
 
 LiteralExpression::LiteralExpression(std::shared_ptr<Token> token) : Expression(LiteralExpressionType) {
-	this->value = token->value;
-	this->number_token = std::move(number_token);
+	this->number_token = token;
 }

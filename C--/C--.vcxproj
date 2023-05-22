@@ -130,6 +130,11 @@
   <ItemGroup>
     <ClCompile Include="BadExpression.cpp" />
     <ClCompile Include="BinaryExpression.cpp" />
+    <ClCompile Include="Binder.cpp" />
+    <ClCompile Include="BoundBinaryExpression.cpp" />
+    <ClCompile Include="BoundExpression.cpp" />
+    <ClCompile Include="BoundLiteralExpression.cpp" />
+    <ClCompile Include="BoundUnaryExpression.cpp" />
     <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Lexer.cpp" />
@@ -140,10 +145,19 @@
     <ClCompile Include="ParserRules.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="UnaryExpression.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BadExpression.h" />
     <ClInclude Include="BinaryExpression.h" />
+    <ClInclude Include="Binder.h" />
+    <ClInclude Include="BoundBinaryExpression.h" />
+    <ClInclude Include="BoundBinaryOperatorType.h" />
+    <ClInclude Include="BoundExpression.h" />
+    <ClInclude Include="BoundExpressionType.h" />
+    <ClInclude Include="BoundLiteralExpression.h" />
+    <ClInclude Include="BoundUnaryExpression.h" />
+    <ClInclude Include="BoundUnaryOperatorType.h" />
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionType.h" />
@@ -155,6 +169,7 @@
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
     <ClInclude Include="UnaryExpression.h" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
