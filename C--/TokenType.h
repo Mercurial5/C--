@@ -11,10 +11,17 @@ enum TokenType {
 
 	IdentifierToken,
 
+
+	// Operators
 	PlusToken,
 	MinusToken,
 	StarToken,
 	SlashToken,
+
+	// Logical operators
+	ExclamationMarkToken,
+	AmpersandAmpersandToken,
+	PipePipeToken,
 
 	OpenParenthesisToken,
 	CloseParenthesisToken,
