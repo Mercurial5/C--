@@ -31,10 +31,10 @@ int ParserRules::get_binary_operator_precedence(TokenType token_type) {
 }
 
 TokenType ParserRules::get_token_type_by_keyword(std::string keyword) {
-	if (keyword == "true") {
+	if (keyword == "truly") {
 		return TrueKeywordToken;
 	}
-	else if (keyword == "false") {
+	else if (keyword == "falsy") {
 		return FalseKeywordToken;
 	}
 
