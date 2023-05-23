@@ -37,7 +37,7 @@ int main() {
 			continue;
 		}
 
-		//Utilities::print_expression(root);
+		Utilities::print_bound_expression(root);
 
 		Evaluator evaluator;
 		std::any result = evaluator.evaluate_expression(root);
