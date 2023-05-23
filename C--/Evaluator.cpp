@@ -19,13 +19,13 @@
 Evaluator::Evaluator() {}
 
 
-int Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> expression) {
+std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> expression) {
 	if (expression->expression_type == BoundLiteralExpressionType) {
 		std::shared_ptr<BoundLiteralExpression> bound_literal_expression = std::dynamic_pointer_cast<BoundLiteralExpression>(expression);
 
 		// Only if bound literal expression is not nullptr (Dynamic cast was successfull)
 		if (bound_literal_expression) {
-			return std::any_cast<int>(bound_literal_expression->value);
+			return bound_literal_expression->value;
 		}
 	}
 
@@ -34,13 +34,21 @@ int Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> expression) 
 
 		// Only if unary expression is not nullptr (Dynamic cast was successfull)
 		if (bound_unary_expression) {
-			int result = this->evaluate_expression(bound_unary_expression->expression);
+			std::any result = this->evaluate_expression(bound_unary_expression->expression);
+
+			if (result.type() != typeid(int)) {
+				std::string message = "Unary expressions are only avialable for integers";
+				this->diagnostics.push_back(message);
+				return result;
+			}
+
+			int result_int = std::any_cast<int>(result);
 
 			switch (bound_unary_expression->operator_type) {
 			case Identity:
-				return result;
+				return result_int;
 			case Negation:
-				return -result;
+				return -result_int;
 			default:
 				throw std::invalid_argument("Unexpected unary operator " + Utilities::bound_unary_operator_name(bound_unary_expression->operator_type));
 			}
@@ -52,14 +60,23 @@ int Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> expression) 
 
 		// Only if binary expression is not nullptr (Dynamic cast was successfull)
 		if (bound_binary_expression) {
-			int left = this->evaluate_expression(bound_binary_expression->left);
-			int right = this->evaluate_expression(bound_binary_expression->right);
+			std::any left = this->evaluate_expression(bound_binary_expression->left);
+			std::any right = this->evaluate_expression(bound_binary_expression->right);
+
+			if (left.type() != typeid(int) || right.type() != typeid(int)) {
+				std::string message = "Binary expressions are only avialable for integers";
+				this->diagnostics.push_back(message);
+				return left;
+			}
+
+			int left_int = std::any_cast<int>(left);
+			int right_int = std::any_cast<int>(right);
 
 			switch (bound_binary_expression->operator_type) {
-			case Addition: return left + right;
-			case Subtraction: return left - right;
-			case Multiplication: return left * right;
-			case Division: return left / right;
+			case Addition: return left_int + right_int;
+			case Subtraction: return left_int - right_int;
+			case Multiplication: return left_int * right_int;
+			case Division: return left_int / right_int;
 			default:
 				throw std::invalid_argument("Unexpected binary operator " + Utilities::bound_binary_operator_name(bound_binary_expression->operator_type));
 			}

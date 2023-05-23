@@ -2,9 +2,10 @@
 #include <vector>
 #include <memory>
 
-
 #include "Lexer.h"
 #include "Token.h"
+
+#include "ParserRules.h"
 
 Lexer::Lexer(const std::string text) {
 	this->text = text;
@@ -43,6 +44,16 @@ Token Lexer::get_token()
 		// Is there a point of this? I didn't saw it, so it stays in comment
 		// std::string raw = this->text.substr(start, length);
 		return Token(WhiteSpaceToken, start, "", nullptr);
+	}
+
+	if (isalpha(this->current())) {
+		int start = this->position;
+		int length = this->eat_until(isalpha);
+
+		std::string raw = this->text.substr(start, length);
+		TokenType type = ParserRules::get_token_type_by_keyword(raw);
+		bool value = type == TrueKeywordToken;
+		return Token(type, start, raw, std::make_any<bool>(value));
 	}
 
 	char current = this->current();

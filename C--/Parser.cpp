@@ -66,7 +66,7 @@ std::shared_ptr<Expression> Parser::parse_expression(int parent_precedence) {
 }
 
 std::shared_ptr<Expression> Parser::parse_primary() {
-	if (this->current().type == NumberToken) {
+	if (this->current().type == NumberToken || this->current().type == TrueKeywordToken || this->current().type == FalseKeywordToken) {
 		return std::make_shared<LiteralExpression>(std::make_shared<Token>(this->next()));
 	}
 

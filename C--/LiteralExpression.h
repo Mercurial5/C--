@@ -12,7 +12,9 @@
 class LiteralExpression : public Expression {
 
 public:
-	std::shared_ptr<Token> number_token;
+	std::shared_ptr<Token> token;
+	std::any value;
 
 	LiteralExpression(std::shared_ptr<Token>);
+	LiteralExpression(std::shared_ptr<Token>, std::any);
 };
