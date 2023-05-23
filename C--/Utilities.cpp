@@ -15,16 +15,22 @@
 
 
 std::map<int, std::string> Utilities::TOKEN_TYPE_MAPPER = {
-		{NumberToken, "NumberToken"},
-		{PlusToken, "PlusToken"},
-		{MinusToken, "MinusToken"},
-		{StarToken, "StarToken"},
-		{SlashToken, "SlashToken"},
-		{OpenParenthesisToken, "OpenParenthesisToken"},
-		{CloseParenthesisToken, "CloseParenthesisToken"},
-		{WhiteSpaceToken, "WhiteSpaceToken"},
-		{EndOfFileToken, "EndOfFileToken"},
-		{BadToken, "BadToken"}
+	{NumberToken, "NumberToken"},
+	{TrueKeywordToken, "TrueKeywordToken"},
+	{FalseKeywordToken, "FalseKeywordToken"},
+	{IdentifierToken, "IdentifierToken"},
+	{PlusToken, "PlusToken"},
+	{MinusToken, "MinusToken"},
+	{StarToken, "StarToken"},
+	{SlashToken, "SlashToken"},
+	{ExclamationToken, "ExclamationMarkToken"},
+	{AmpersandAmpersandToken, "AmpersandAmpersandToken"},
+	{PipePipeToken, "PipePipeToken"},
+	{OpenParenthesisToken, "OpenParenthesisToken"},
+	{CloseParenthesisToken, "CloseParenthesisToken"},
+	{WhiteSpaceToken, "WhiteSpaceToken"},
+	{EndOfFileToken, "EndOfFileToken"},
+	{BadToken, "BadToken"}
 };
 
 std::map<int, std::string> Utilities::EXPRESSION_TYPE_MAPPER = {

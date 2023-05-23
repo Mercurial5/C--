@@ -12,8 +12,7 @@ Lexer::Lexer(const std::string text) {
 	this->position = 0;
 }
 
-std::vector<std::shared_ptr<Token>> Lexer::tokenize()
-{
+std::vector<std::shared_ptr<Token>> Lexer::tokenize() {
 	std::vector<std::shared_ptr<Token>> tokens;
 	while (this->position < this->text.size()) {
 		Token token = this->get_token();
@@ -28,9 +27,8 @@ std::vector<std::shared_ptr<Token>> Lexer::tokenize()
 	return tokens;
 }
 
-Token Lexer::get_token()
-{
-	if (isdigit(this->current())) {
+Token Lexer::get_token() {
+	if (isdigit(this->peek())) {
 		int start = this->position;
 		int length = this->eat_until(isdigit);
 		std::string raw = this->text.substr(start, length);
@@ -38,7 +36,7 @@ Token Lexer::get_token()
 		return Token(NumberToken, start, raw, std::make_any<int>(value));
 	}
 
-	if (isspace(this->current())) {
+	if (isspace(this->peek())) {
 		int start = this->position;
 		int length = this->eat_until(isspace);
 		// Is there a point of this? I didn't saw it, so it stays in comment
@@ -46,7 +44,7 @@ Token Lexer::get_token()
 		return Token(WhiteSpaceToken, start, "", nullptr);
 	}
 
-	if (isalpha(this->current())) {
+	if (isalpha(this->peek())) {
 		int start = this->position;
 		int length = this->eat_until(isalpha);
 
@@ -56,7 +54,7 @@ Token Lexer::get_token()
 		return Token(type, start, raw, std::make_any<bool>(value));
 	}
 
-	char current = this->current();
+	char current = this->peek();
 	switch (current) {
 	case '+': return Token(PlusToken, this->next(), current, nullptr);
 	case '-': return Token(MinusToken, this->next(), current, nullptr);
@@ -64,6 +62,21 @@ Token Lexer::get_token()
 	case '/': return Token(SlashToken, this->next(), current, nullptr);
 	case '(': return Token(OpenParenthesisToken, this->next(), current, nullptr);
 	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);
+	case '!': return Token(ExclamationToken, this->next(), current, nullptr);
+	case '&': {
+		if (this->peek(1) == '&') {
+			int start = this->position;
+			this->next(); this->next();
+			return Token(AmpersandAmpersandToken, start, "&&", nullptr);
+		}
+	}
+	case '|': {
+		if (this->peek(1) == '|') {
+			int start = this->position;
+			this->next(); this->next();
+			return Token(PipePipeToken, start, "||", nullptr);
+		}
+	}
 	}
 
 	std::string message = "Bad character at position " + std::to_string(this->position);
@@ -71,13 +84,16 @@ Token Lexer::get_token()
 	return Token(BadToken, this->next(), current, nullptr);
 }
 
-bool Lexer::is_token_skipable(const Token& token)
-{
+bool Lexer::is_token_skipable(const Token& token) {
 	return token.type == WhiteSpaceToken;
 }
 
-char Lexer::current()
-{
+char Lexer::peek(int offset) {
+	int position = this->position + offset;
+	if (position > this->text.size()) {
+		return this->text[this->text.size() - 1];
+	}
+
 	return this->text[this->position];
 }
 
@@ -88,7 +104,7 @@ int Lexer::next() {
 int Lexer::eat_until(int __cdecl compare(int)) {
 	int start = this->position;
 
-	while (compare(this->current())) {
+	while (compare(this->peek())) {
 		this->next();
 	}
 

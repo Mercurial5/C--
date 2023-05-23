@@ -24,8 +24,8 @@ private:
 
 	// utilities
 
-	// Returns character of a current position
-	char current();
+	// Returns character of a current + offset position
+	char peek(int = 0);
 
 	// Increment position and return previous position
 	int next();

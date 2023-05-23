@@ -2,5 +2,7 @@
 
 enum BoundUnaryOperatorType {
 	Identity,
-	Negation
+	Negation,
+
+	LogicalNegation
 };
