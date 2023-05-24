@@ -4,14 +4,14 @@
 #include <typeinfo>
 
 #include "BoundExpression.h"
-#include "BoundUnaryOperatorType.h"
+#include "BoundUnaryOperator.h"
 
 class BoundUnaryExpression : public BoundExpression {
 public:
-	BoundUnaryOperatorType operator_type;
+	std::shared_ptr<BoundUnaryOperator> op;
 	std::shared_ptr<BoundExpression> expression;
 
-	BoundUnaryExpression(BoundUnaryOperatorType, std::shared_ptr<BoundExpression>);
+	BoundUnaryExpression(std::shared_ptr<BoundUnaryOperator>, std::shared_ptr<BoundExpression>);
 	virtual const std::type_info& type() override;
 };
 

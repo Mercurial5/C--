@@ -132,9 +132,11 @@
     <ClCompile Include="BinaryExpression.cpp" />
     <ClCompile Include="Binder.cpp" />
     <ClCompile Include="BoundBinaryExpression.cpp" />
+    <ClCompile Include="BoundBinaryOperator.cpp" />
     <ClCompile Include="BoundExpression.cpp" />
     <ClCompile Include="BoundLiteralExpression.cpp" />
     <ClCompile Include="BoundUnaryExpression.cpp" />
+    <ClCompile Include="BoundUnaryOperator.cpp" />
     <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Lexer.cpp" />
@@ -152,11 +154,13 @@
     <ClInclude Include="BinaryExpression.h" />
     <ClInclude Include="Binder.h" />
     <ClInclude Include="BoundBinaryExpression.h" />
+    <ClInclude Include="BoundBinaryOperator.h" />
     <ClInclude Include="BoundBinaryOperatorType.h" />
     <ClInclude Include="BoundExpression.h" />
     <ClInclude Include="BoundExpressionType.h" />
     <ClInclude Include="BoundLiteralExpression.h" />
     <ClInclude Include="BoundUnaryExpression.h" />
+    <ClInclude Include="BoundUnaryOperator.h" />
     <ClInclude Include="BoundUnaryOperatorType.h" />
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="Expression.h" />
