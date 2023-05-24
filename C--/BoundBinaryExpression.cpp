@@ -1,12 +1,17 @@
+#include <typeinfo>
+#include <memory>
+
 #include "BoundBinaryExpression.h"
 
-BoundBinaryExpression::BoundBinaryExpression(std::shared_ptr<BoundExpression> left, BoundBinaryOperatorType operator_type, std::shared_ptr<BoundExpression> right) : 
+#include "BoundExpression.h"
+
+BoundBinaryExpression::BoundBinaryExpression(std::shared_ptr<BoundExpression> left, std::shared_ptr<BoundBinaryOperator> op, std::shared_ptr<BoundExpression> right) : 
     BoundExpression(BoundBinaryExpressionType) {
     this->left = left;
-    this->operator_type = operator_type;
+    this->op = op;
     this->right = right;
 }
 
 const std::type_info& BoundBinaryExpression::type() {
-    return this->left->type();
+    return this->op->result_type;
 }

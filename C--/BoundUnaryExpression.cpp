@@ -3,13 +3,15 @@
 #include "BoundExpression.h"
 #include "BoundUnaryExpression.h"
 
-BoundUnaryExpression::BoundUnaryExpression(BoundUnaryOperatorType operator_type, std::shared_ptr<BoundExpression> expression) : BoundExpression(BoundUnaryExpressionType)
-{
-	this->operator_type = operator_type;
+#include "BoundUnaryOperator.h"
+
+BoundUnaryExpression::BoundUnaryExpression(std::shared_ptr<BoundUnaryOperator> op, std::shared_ptr<BoundExpression> expression) : 
+	BoundExpression(BoundUnaryExpressionType) {
+	this->op = op;
 	this->expression = expression;
 }
 
 const std::type_info& BoundUnaryExpression::type()
 {
-	return this->expression->type();
+	return this->op->result_type;
 }
