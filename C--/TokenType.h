@@ -20,10 +20,10 @@ enum TokenType {
 
 	// Logical operators
 	ExclamationToken,
-	AmpersandAmpersandToken,
-	PipePipeToken,
-	EqualsEqualsToken,
-	ExclamationEqualsToken,
+	DoubleAmpersandToken,
+	DoublePipeToken,
+	DoubleEqualToken,
+	ExclamationEqualToken,
 
 	OpenParenthesisToken,
 	CloseParenthesisToken,

@@ -15,14 +15,14 @@ std::vector<std::shared_ptr<BoundBinaryOperator>> BoundBinaryOperator::operators
 	std::make_shared<BoundBinaryOperator>(StarToken, Multiplication, typeid(int)),
 	std::make_shared<BoundBinaryOperator>(SlashToken, Division, typeid(int)),
 
-	std::make_shared<BoundBinaryOperator>(EqualsEqualsToken, Equals, typeid(int), typeid(bool)),
-	std::make_shared<BoundBinaryOperator>(ExclamationEqualsToken, NotEquals, typeid(int), typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(DoubleEqualToken, Equal, typeid(int), typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(ExclamationEqualToken, NotEqual, typeid(int), typeid(bool)),
 
-	std::make_shared<BoundBinaryOperator>(AmpersandAmpersandToken, LogicalAnd, typeid(bool)),
-	std::make_shared<BoundBinaryOperator>(PipePipeToken, LogicalOr, typeid(bool)),
-	std::make_shared<BoundBinaryOperator>(PipePipeToken, LogicalOr, typeid(bool)),
-	std::make_shared<BoundBinaryOperator>(EqualsEqualsToken, Equals, typeid(bool)),
-	std::make_shared<BoundBinaryOperator>(ExclamationEqualsToken, NotEquals, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(DoubleAmpersandToken, LogicalAnd, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(DoublePipeToken, LogicalOr, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(DoublePipeToken, LogicalOr, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(DoubleEqualToken, Equal, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(ExclamationEqualToken, NotEqual, typeid(bool)),
 };
 
 BoundBinaryOperator::BoundBinaryOperator(TokenType token_type, BoundBinaryOperatorType bound_binary_operator_type, const std::type_info& type) :
