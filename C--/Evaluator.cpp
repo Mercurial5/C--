@@ -37,7 +37,7 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 		if (bound_unary_expression) {
 			std::any result = this->evaluate_expression(bound_unary_expression->expression);
 
-			switch (bound_unary_expression->operator_type)
+			switch (bound_unary_expression->op->operator_type)
 			{
 			case Identity:
 				return std::any_cast<int>(result);
@@ -46,7 +46,7 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 			case LogicalNegation:
 				return !std::any_cast<bool>(result);
 			default:
-				std::string op_name = Utilities::bound_unary_operator_name(bound_unary_expression->operator_type);
+				std::string op_name = Utilities::bound_unary_operator_name(bound_unary_expression->op->operator_type);
 				throw std::invalid_argument("Unexpected unary operator " + op_name + " for " + result.type().name());
 			}
 		}
@@ -60,7 +60,7 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 			std::any left = this->evaluate_expression(bound_binary_expression->left);
 			std::any right = this->evaluate_expression(bound_binary_expression->right);
 
-			switch (bound_binary_expression->operator_type) {
+			switch (bound_binary_expression->op->operator_type) {
 			case Addition:
 				return std::any_cast<int>(left) + std::any_cast<int>(right);
 			case Subtraction:
@@ -74,7 +74,7 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 			case LogicalOr:
 				return std::any_cast<bool>(left) || std::any_cast<bool>(right);
 			default:
-				std::string op_name = Utilities::bound_binary_operator_name(bound_binary_expression->operator_type);
+				std::string op_name = Utilities::bound_binary_operator_name(bound_binary_expression->op->operator_type);
 				throw std::invalid_argument("Unexpected binary operator " + op_name + " for " + left.type().name() + " and " + right.type().name());
 			}
 		}

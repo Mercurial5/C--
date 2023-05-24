@@ -159,7 +159,7 @@ void Utilities::print_bound_expression(std::shared_ptr<BoundExpression> expressi
 		//Only if dynamic cast is successful
 		if (bound_unary_expression) {
 			std::cout << indent << "Operator Type: " << std::endl;
-			std::cout << indent + '\t' << Utilities::bound_unary_operator_name(bound_unary_expression->operator_type) << std::endl;
+			std::cout << indent + '\t' << Utilities::bound_unary_operator_name(bound_unary_expression->op->operator_type) << std::endl;
 			print_bound_expression(bound_unary_expression->expression, indent);
 		}
 	}
@@ -170,7 +170,7 @@ void Utilities::print_bound_expression(std::shared_ptr<BoundExpression> expressi
 		if (bound_binary_expression) {
 			print_bound_expression(bound_binary_expression->left, indent);
 			std::cout << indent << "Operator Type: " << std::endl;
-			std::cout << indent + '\t' << Utilities::bound_binary_operator_name(bound_binary_expression->operator_type) << std::endl;
+			std::cout << indent + '\t' << Utilities::bound_binary_operator_name(bound_binary_expression->op->operator_type) << std::endl;
 			print_bound_expression(bound_binary_expression->right, indent);
 		}
 	}
