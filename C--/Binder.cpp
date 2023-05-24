@@ -13,6 +13,9 @@
 #include "BoundUnaryOperatorType.h"
 #include "BoundBinaryOperatorType.h"
 
+#include "BoundUnaryOperator.h"
+#include "BoundBinaryOperator.h"
+
 #include "ExpressionType.h"
 #include "TokenType.h"
 
@@ -55,13 +58,16 @@ std::shared_ptr<BoundExpression> Binder::bind_unary_expression(std::shared_ptr<U
 	}
 
 	std::shared_ptr<BoundExpression> bound_expression = this->bind_expression(expression->expression);
-	std::optional<BoundUnaryOperatorType> operator_type_optional = this->bind_unary_operator_type(expression->operator_token, bound_expression->type());
-	if (!operator_type_optional.has_value()) {
+
+	std::optional<std::shared_ptr<BoundUnaryOperator>> bound_operator_optional =
+		BoundUnaryOperator::bind(expression->operator_token->type, bound_expression->type());
+
+	if (!bound_operator_optional.has_value()) {
 		return bound_expression;
 	}
 
-	BoundUnaryOperatorType operator_type = operator_type_optional.value();
-	return std::make_shared<BoundUnaryExpression>(operator_type, bound_expression);
+	std::shared_ptr<BoundUnaryOperator> bound_operator = bound_operator_optional.value();
+	return std::make_shared<BoundUnaryExpression>(bound_operator, bound_expression);
 }
 
 std::shared_ptr<BoundExpression> Binder::bind_binary_expression(std::shared_ptr<BinaryExpression> expression) {
@@ -71,70 +77,15 @@ std::shared_ptr<BoundExpression> Binder::bind_binary_expression(std::shared_ptr<
 
 	std::shared_ptr<BoundExpression> left = this->bind_expression(expression->left);
 	std::shared_ptr<BoundExpression> right = this->bind_expression(expression->right);
-	std::optional<BoundBinaryOperatorType> operator_type_optional = this->bind_binary_operator_type(expression->operator_token, left->type(), right->type());
-	if (!operator_type_optional.has_value()) {
+
+
+	std::optional<std::shared_ptr<BoundBinaryOperator>> bound_operator_optional =
+		BoundBinaryOperator::bind(expression->operator_token->type, left->type(), right->type());
+
+	if (!bound_operator_optional.has_value()) {
 		return left;
 	}
 
-	BoundBinaryOperatorType operator_type = operator_type_optional.value();
-	return std::make_shared<BoundBinaryExpression>(left, operator_type, right);
-}
-
-std::optional<BoundUnaryOperatorType> Binder::bind_unary_operator_type(std::shared_ptr<Token> operator_token, const std::type_info& type) {
-	if (type == typeid(int)) {
-		switch (operator_token->type) {
-		case PlusToken:
-			return Identity;
-		case MinusToken:
-			return Negation;
-		default:
-			throw std::invalid_argument("Unexpected operator_token type in bind_unary_operator_type");
-		}
-	}
-	else if (type == typeid(bool)) {
-		switch (operator_token->type)
-		{
-		case ExclamationToken:
-			return LogicalNegation;
-		default:
-			throw std::invalid_argument("Unexpected operator_token type in bind_unary_operator_type");
-		}
-	}
-	else {
-		std::string message = "Unary operator " + Utilities::token_name(operator_token->type) + " is not defined for type " + type.name();
-		this->diagnostics.push_back(message);
-		return std::nullopt;
-	}
-}
-
-std::optional<BoundBinaryOperatorType> Binder::bind_binary_operator_type(std::shared_ptr<Token> operator_token, const std::type_info& left_type, const std::type_info& right_type) {
-	if (left_type == typeid(int) && right_type == typeid(int)) {
-		switch (operator_token->type) {
-		case PlusToken:
-			return Addition;
-		case MinusToken:
-			return Subtraction;
-		case StarToken:
-			return Multiplication;
-		case SlashToken:
-			return Division;
-
-		default: throw std::invalid_argument("Unexpected operator_token type in bind_binary_operator_type");
-		}
-	} else if (left_type == typeid(bool) && right_type == typeid(bool)) {
-		switch (operator_token->type)
-		{
-		case AmpersandAmpersandToken:
-			return LogicalAnd;
-		case PipePipeToken:
-			return LogicalOr;
-		default:
-			throw std::invalid_argument("Unexpected operator_token type in bind_binary_operator_type");
-		}
-	}
-	else {
-		std::string message = "Binary operator " + Utilities::token_name(operator_token->type) + " is not defined for types (" + left_type.name() + ", " + right_type.name() + ")";
-		this->diagnostics.push_back(message);
-		return std::nullopt;
-	}
+	std::shared_ptr<BoundBinaryOperator> bound_operator = bound_operator_optional.value();
+	return std::make_shared<BoundBinaryExpression>(left, bound_operator, right);
 }

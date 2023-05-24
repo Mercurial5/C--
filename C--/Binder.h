@@ -30,11 +30,7 @@ private:
 	std::shared_ptr<BoundExpression> bind_literal_expression(std::shared_ptr<LiteralExpression>);
 	std::shared_ptr<BoundExpression> bind_unary_expression(std::shared_ptr<UnaryExpression>);
 	std::shared_ptr<BoundExpression> bind_binary_expression(std::shared_ptr<BinaryExpression>);
-
-	std::optional<BoundUnaryOperatorType> bind_unary_operator_type(std::shared_ptr<Token>, const std::type_info&);
-	std::optional<BoundBinaryOperatorType> bind_binary_operator_type(std::shared_ptr<Token>, const std::type_info&, const std::type_info&);
 	
-
 	template <typename CastTo, typename CastFrom>
 	std::shared_ptr<CastTo> cast(std::shared_ptr<CastFrom> obj) {
 		return std::dynamic_pointer_cast<CastTo>(obj);
