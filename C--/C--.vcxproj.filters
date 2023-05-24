@@ -40,6 +40,18 @@
     <Filter Include="Header Files\Frontend\Binding\Types">
       <UniqueIdentifier>{55d6530a-8496-492b-9765-23d480133e86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Frontend\Binding\Expressions">
+      <UniqueIdentifier>{d22450ab-5c6d-4175-912d-05d7bcadefe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Frontend\Binding\Operators">
+      <UniqueIdentifier>{ec6406f9-40a2-4bc1-86df-3f521a411587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Binding\Expressions">
+      <UniqueIdentifier>{7e20a5d3-55b4-45c4-9fae-d585babffd70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Frontend\Binding\Operators">
+      <UniqueIdentifier>{8c8116d4-f067-4769-add3-4cb645c306be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -85,16 +97,22 @@
       <Filter>Source Files\Frontend\Binding</Filter>
     </ClCompile>
     <ClCompile Include="BoundBinaryExpression.cpp">
-      <Filter>Source Files\Frontend\Binding</Filter>
+      <Filter>Source Files\Frontend\Binding\Expressions</Filter>
     </ClCompile>
     <ClCompile Include="BoundExpression.cpp">
-      <Filter>Source Files\Frontend\Binding</Filter>
+      <Filter>Source Files\Frontend\Binding\Expressions</Filter>
     </ClCompile>
     <ClCompile Include="BoundLiteralExpression.cpp">
-      <Filter>Source Files\Frontend\Binding</Filter>
+      <Filter>Source Files\Frontend\Binding\Expressions</Filter>
     </ClCompile>
     <ClCompile Include="BoundUnaryExpression.cpp">
-      <Filter>Source Files\Frontend\Binding</Filter>
+      <Filter>Source Files\Frontend\Binding\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundBinaryOperator.cpp">
+      <Filter>Source Files\Frontend\Binding\Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundUnaryOperator.cpp">
+      <Filter>Source Files\Frontend\Binding\Operators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,18 +161,6 @@
     <ClInclude Include="Binder.h">
       <Filter>Header Files\Frontend\Binding</Filter>
     </ClInclude>
-    <ClInclude Include="BoundBinaryExpression.h">
-      <Filter>Header Files\Frontend\Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundExpression.h">
-      <Filter>Header Files\Frontend\Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundLiteralExpression.h">
-      <Filter>Header Files\Frontend\Binding</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundUnaryExpression.h">
-      <Filter>Header Files\Frontend\Binding</Filter>
-    </ClInclude>
     <ClInclude Include="BoundBinaryOperatorType.h">
       <Filter>Header Files\Frontend\Binding\Types</Filter>
     </ClInclude>
@@ -163,6 +169,24 @@
     </ClInclude>
     <ClInclude Include="BoundUnaryOperatorType.h">
       <Filter>Header Files\Frontend\Binding\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundBinaryExpression.h">
+      <Filter>Header Files\Frontend\Binding\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundExpression.h">
+      <Filter>Header Files\Frontend\Binding\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundLiteralExpression.h">
+      <Filter>Header Files\Frontend\Binding\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundUnaryExpression.h">
+      <Filter>Header Files\Frontend\Binding\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundBinaryOperator.h">
+      <Filter>Header Files\Frontend\Binding\Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundUnaryOperator.h">
+      <Filter>Header Files\Frontend\Binding\Operators</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
