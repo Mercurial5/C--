@@ -15,13 +15,22 @@ std::vector<std::shared_ptr<BoundBinaryOperator>> BoundBinaryOperator::operators
 	std::make_shared<BoundBinaryOperator>(StarToken, Multiplication, typeid(int)),
 	std::make_shared<BoundBinaryOperator>(SlashToken, Division, typeid(int)),
 
+	std::make_shared<BoundBinaryOperator>(EqualsEqualsToken, Equals, typeid(int), typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(ExclamationEqualsToken, NotEquals, typeid(int), typeid(bool)),
+
 	std::make_shared<BoundBinaryOperator>(AmpersandAmpersandToken, LogicalAnd, typeid(bool)),
 	std::make_shared<BoundBinaryOperator>(PipePipeToken, LogicalOr, typeid(bool)),
 	std::make_shared<BoundBinaryOperator>(PipePipeToken, LogicalOr, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(EqualsEqualsToken, Equals, typeid(bool)),
+	std::make_shared<BoundBinaryOperator>(ExclamationEqualsToken, NotEquals, typeid(bool)),
 };
 
 BoundBinaryOperator::BoundBinaryOperator(TokenType token_type, BoundBinaryOperatorType bound_binary_operator_type, const std::type_info& type) :
 	BoundBinaryOperator(token_type, bound_binary_operator_type, type, type, type) {}
+
+BoundBinaryOperator::BoundBinaryOperator(TokenType token_type, BoundBinaryOperatorType bound_binary_operator_type, const std::type_info& operator_type,
+	const std::type_info& result_type) :
+	BoundBinaryOperator(token_type, bound_binary_operator_type, operator_type, operator_type, result_type) {}
 
 BoundBinaryOperator::BoundBinaryOperator(TokenType token_type, BoundBinaryOperatorType bound_binary_operator_type, const std::type_info& left_type,
 	const std::type_info& right_type, const std::type_info& result_type) :

@@ -58,6 +58,8 @@ std::map<int, std::string> Utilities::BOUND_BINARY_OPERATOR_TYPE_MAPPER = {
 	{Subtraction, "Subtraction"},
 	{Multiplication, "Multiplication"},
 	{Division, "Division"},
+	{Equals, "Equals"},
+	{NotEquals, "NotEquals"},
 	{LogicalAnd, "LogicalAnd"},
 	{LogicalOr, "LogicalOr"}
 };

@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <memory>
 #include <string>
+#include <algorithm>
 
 #include "Evaluator.h"
 
@@ -73,6 +74,20 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 				return std::any_cast<bool>(left) && std::any_cast<bool>(right);
 			case LogicalOr:
 				return std::any_cast<bool>(left) || std::any_cast<bool>(right);
+			case Equals:
+				if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+					return std::any_cast<bool>(left) == std::any_cast<bool>(right);
+				}
+				else if (left.type() == typeid(int) && right.type() == typeid(int)) {
+					return std::any_cast<int>(left) == std::any_cast<int>(right);
+				}
+			case NotEquals:
+				if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+					return std::any_cast<bool>(left) != std::any_cast<bool>(right);
+				}
+				else if (left.type() == typeid(int) && right.type() == typeid(int)) {
+					return std::any_cast<int>(left) != std::any_cast<int>(right);
+				}
 			default:
 				std::string op_name = Utilities::bound_binary_operator_name(bound_binary_expression->op->operator_type);
 				throw std::invalid_argument("Unexpected binary operator " + op_name + " for " + left.type().name() + " and " + right.type().name());
