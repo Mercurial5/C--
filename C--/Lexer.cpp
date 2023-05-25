@@ -66,7 +66,7 @@ Token Lexer::get_token() {
 		if (this->peek(1) == '=') {
 			int start = this->position;
 			this->next(); this->next();
-			return Token(ExclamationEqualsToken, start, "!=", nullptr);
+			return Token(ExclamationEqualToken, start, "!=", nullptr);
 		}
 		else
 		{
@@ -77,21 +77,21 @@ Token Lexer::get_token() {
 		if (this->peek(1) == '&') {
 			int start = this->position;
 			this->next(); this->next();
-			return Token(AmpersandAmpersandToken, start, "&&", nullptr);
+			return Token(DoubleAmpersandToken, start, "&&", nullptr);
 		}
 	}
 	case '|': {
 		if (this->peek(1) == '|') {
 			int start = this->position;
 			this->next(); this->next();
-			return Token(PipePipeToken, start, "||", nullptr);
+			return Token(DoublePipeToken, start, "||", nullptr);
 		}
 	}
 	case '=': {
 		if (this->peek(1) == '=') {
 			int start = this->position;
 			this->next(); this->next();
-			return Token(EqualsEqualsToken, start, "==", nullptr);
+			return Token(DoubleEqualToken, start, "==", nullptr);
 		}
 	}
 	}

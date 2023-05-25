@@ -74,14 +74,14 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 				return std::any_cast<bool>(left) && std::any_cast<bool>(right);
 			case LogicalOr:
 				return std::any_cast<bool>(left) || std::any_cast<bool>(right);
-			case Equals:
+			case Equal:
 				if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
 					return std::any_cast<bool>(left) == std::any_cast<bool>(right);
 				}
 				else if (left.type() == typeid(int) && right.type() == typeid(int)) {
 					return std::any_cast<int>(left) == std::any_cast<int>(right);
 				}
-			case NotEquals:
+			case NotEqual:
 				if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
 					return std::any_cast<bool>(left) != std::any_cast<bool>(right);
 				}

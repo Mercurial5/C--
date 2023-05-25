@@ -26,14 +26,14 @@ int ParserRules::get_binary_operator_precedence(TokenType token_type) {
 	case MinusToken:
 		return 4;
 
-	case EqualsEqualsToken:
-	case ExclamationEqualsToken:
+	case DoubleEqualToken:
+	case ExclamationEqualToken:
 		return 3;
 
-	case AmpersandAmpersandToken:
+	case DoubleAmpersandToken:
 		return 2;
 
-	case PipePipeToken:
+	case DoublePipeToken:
 		return 1;
 
 	default:

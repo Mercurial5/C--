@@ -30,8 +30,8 @@ std::map<int, std::string> Utilities::TOKEN_TYPE_MAPPER = {
 	{StarToken, "StarToken"},
 	{SlashToken, "SlashToken"},
 	{ExclamationToken, "ExclamationMarkToken"},
-	{AmpersandAmpersandToken, "AmpersandAmpersandToken"},
-	{PipePipeToken, "PipePipeToken"},
+	{DoubleAmpersandToken, "DoubleAmpersandToken"},
+	{DoublePipeToken, "DoublePipeToken"},
 	{OpenParenthesisToken, "OpenParenthesisToken"},
 	{CloseParenthesisToken, "CloseParenthesisToken"},
 	{WhiteSpaceToken, "WhiteSpaceToken"},
@@ -58,8 +58,8 @@ std::map<int, std::string> Utilities::BOUND_BINARY_OPERATOR_TYPE_MAPPER = {
 	{Subtraction, "Subtraction"},
 	{Multiplication, "Multiplication"},
 	{Division, "Division"},
-	{Equals, "Equals"},
-	{NotEquals, "NotEquals"},
+	{Equal, "Equal"},
+	{NotEqual, "NotEqual"},
 	{LogicalAnd, "LogicalAnd"},
 	{LogicalOr, "LogicalOr"}
 };

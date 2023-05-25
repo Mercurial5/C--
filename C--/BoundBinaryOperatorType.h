@@ -6,8 +6,8 @@ enum BoundBinaryOperatorType {
 	Multiplication,
 	Division,
 
-	Equals,
-	NotEquals,
+	Equal,
+	NotEqual,
 
 	LogicalAnd,
 	LogicalOr
