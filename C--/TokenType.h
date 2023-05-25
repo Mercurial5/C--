@@ -22,6 +22,8 @@ enum TokenType {
 	ExclamationToken,
 	AmpersandAmpersandToken,
 	PipePipeToken,
+	EqualsEqualsToken,
+	ExclamationEqualsToken,
 
 	OpenParenthesisToken,
 	CloseParenthesisToken,

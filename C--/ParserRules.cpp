@@ -8,7 +8,7 @@ int ParserRules::get_unary_operator_precedence(TokenType token_type) {
 	case ExclamationToken:
 	case PlusToken:
 	case MinusToken:
-		return 5;
+		return 6;
 
 	default:
 		return 0;
@@ -20,10 +20,14 @@ int ParserRules::get_binary_operator_precedence(TokenType token_type) {
 	{
 	case StarToken:
 	case SlashToken:
-		return 4;
+		return 5;
 
 	case PlusToken:
 	case MinusToken:
+		return 4;
+
+	case EqualsEqualsToken:
+	case ExclamationEqualsToken:
 		return 3;
 
 	case AmpersandAmpersandToken:

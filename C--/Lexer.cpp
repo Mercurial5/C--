@@ -62,7 +62,17 @@ Token Lexer::get_token() {
 	case '/': return Token(SlashToken, this->next(), current, nullptr);
 	case '(': return Token(OpenParenthesisToken, this->next(), current, nullptr);
 	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);
-	case '!': return Token(ExclamationToken, this->next(), current, nullptr);
+	case '!': {
+		if (this->peek(1) == '=') {
+			int start = this->position;
+			this->next(); this->next();
+			return Token(ExclamationEqualsToken, start, "!=", nullptr);
+		}
+		else
+		{
+			return Token(ExclamationToken, this->next(), current, nullptr);
+		}
+	}
 	case '&': {
 		if (this->peek(1) == '&') {
 			int start = this->position;
@@ -75,6 +85,13 @@ Token Lexer::get_token() {
 			int start = this->position;
 			this->next(); this->next();
 			return Token(PipePipeToken, start, "||", nullptr);
+		}
+	}
+	case '=': {
+		if (this->peek(1) == '=') {
+			int start = this->position;
+			this->next(); this->next();
+			return Token(EqualsEqualsToken, start, "==", nullptr);
 		}
 	}
 	}

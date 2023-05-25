@@ -20,6 +20,7 @@ public:
 	const std::type_info& result_type;
 
 	BoundBinaryOperator(TokenType, BoundBinaryOperatorType, const std::type_info&);
+	BoundBinaryOperator(TokenType, BoundBinaryOperatorType, const std::type_info&, const std::type_info&);
 	BoundBinaryOperator(TokenType, BoundBinaryOperatorType, const std::type_info&, const std::type_info&, const std::type_info&);
 
 	static std::optional<std::shared_ptr<BoundBinaryOperator>> bind(TokenType, const std::type_info&, const std::type_info&);
