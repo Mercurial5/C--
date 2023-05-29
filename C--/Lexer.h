@@ -1,18 +1,23 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 #include <memory>
 
 #include "Token.h"
 
+#include "DiagnosticBag.h"
+
 
 class Lexer {
 public:
-	std::vector<std::string> diagnostics;
+	DiagnosticBag diagnostics;
 
 	Lexer(const std::string);
 	std::vector<std::shared_ptr<Token>> tokenize();
+
+	std::optional<int> parse_int(std::string);
 
 private:
 	std::string text;
