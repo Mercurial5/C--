@@ -42,3 +42,15 @@ void DiagnosticBag::report_unexpected_token(TextSpan span, TokenType actual, Tok
 
 	this->report(span, message);
 }
+
+void DiagnosticBag::report_undefined_unary_operator(Token operator_token, const std::type_info& type) {
+	std::string message = "Unary operator `" + operator_token.raw + "` is not defined for <" + type.name() + '>';
+
+	this->report(operator_token.span, message);
+}
+
+void DiagnosticBag::report_undefined_binary_operator(Token operator_token, const std::type_info& left_type, const std::type_info& right_type) {
+	std::string message = "Binary operator `" + operator_token.raw + "` is not defined for <" + left_type.name() + "> and <" + right_type.name() + '>';
+
+	this->report(operator_token.span, message);
+}

@@ -19,6 +19,9 @@ public:
 	void report_bad_character(int, char);
 
 	void report_bad_token(Token);
-	void report_unexpected_token(TextSpan, TokenType, TokenType);	
+	void report_unexpected_token(TextSpan, TokenType, TokenType);
+
+	void report_undefined_unary_operator(Token, const std::type_info&);
+	void report_undefined_binary_operator(Token, const std::type_info&, const std::type_info&);
 };
 
