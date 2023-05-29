@@ -1,4 +1,5 @@
 #include <typeinfo>
+#include <vector>
 #include <string>
 
 #include "DiagnosticBag.h"
@@ -13,7 +14,19 @@ void DiagnosticBag::report(TextSpan span, std::string message) {
 }
 
 void DiagnosticBag::extend(const DiagnosticBag& bag) {
-	this->diagnostics.insert(begin(this->diagnostics), begin(bag.diagnostics), end(bag.diagnostics));
+	this->diagnostics.insert(this->diagnostics.begin(), bag.diagnostics.begin(), bag.diagnostics.end());
+}
+
+bool DiagnosticBag::empty() {
+	return this->diagnostics.empty();
+}
+
+Diagnostic* DiagnosticBag::begin() {
+	return this->diagnostics.data();
+}
+
+Diagnostic* DiagnosticBag::end() {
+	return this->diagnostics.data() + this->diagnostics.size();
 }
 
 void DiagnosticBag::report_invalid_number(int start, int length, std::string raw, const std::type_info& type) {
