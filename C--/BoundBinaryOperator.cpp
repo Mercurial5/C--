@@ -11,9 +11,24 @@
 
 std::vector<std::shared_ptr<BoundBinaryOperator>> BoundBinaryOperator::operators = {
 	std::make_shared<BoundBinaryOperator>(PlusToken, Addition, typeid(int)),
+	std::make_shared<BoundBinaryOperator>(PlusToken, Addition, typeid(int), typeid(bool), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(PlusToken, Addition, typeid(bool), typeid(int), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(PlusToken, Addition, typeid(bool), typeid(bool), typeid(int)),
+
 	std::make_shared<BoundBinaryOperator>(MinusToken, Subtraction, typeid(int)),
+	std::make_shared<BoundBinaryOperator>(MinusToken, Subtraction, typeid(int), typeid(bool), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(MinusToken, Subtraction, typeid(bool), typeid(int), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(MinusToken, Subtraction, typeid(bool), typeid(bool), typeid(int)),
+
 	std::make_shared<BoundBinaryOperator>(StarToken, Multiplication, typeid(int)),
+	std::make_shared<BoundBinaryOperator>(StarToken, Multiplication, typeid(int), typeid(bool), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(StarToken, Multiplication, typeid(bool), typeid(int), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(StarToken, Multiplication, typeid(bool), typeid(bool), typeid(int)),
+
 	std::make_shared<BoundBinaryOperator>(SlashToken, Division, typeid(int)),
+	std::make_shared<BoundBinaryOperator>(SlashToken, Division, typeid(int), typeid(bool), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(SlashToken, Division, typeid(bool), typeid(int), typeid(int)),
+	std::make_shared<BoundBinaryOperator>(SlashToken, Division, typeid(bool), typeid(bool), typeid(int)),
 
 	std::make_shared<BoundBinaryOperator>(DoubleEqualToken, Equal, typeid(int), typeid(bool)),
 	std::make_shared<BoundBinaryOperator>(ExclamationEqualToken, NotEqual, typeid(int), typeid(bool)),
