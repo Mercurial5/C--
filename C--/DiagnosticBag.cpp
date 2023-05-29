@@ -7,6 +7,10 @@ void DiagnosticBag::report(TextSpan span, std::string message) {
 	this->diagnostics.push_back(Diagnostic(span, message));
 }
 
+void DiagnosticBag::extend(const DiagnosticBag& bag) {
+	this->diagnostics.insert(begin(this->diagnostics), begin(bag.diagnostics), end(bag.diagnostics));
+}
+
 void DiagnosticBag::report_invalid_number(int start, int length, std::string raw, const std::type_info& type) {
 	TextSpan span(start, length);
 	std::string message = "The number " + raw + " is not valid " + type.name();
