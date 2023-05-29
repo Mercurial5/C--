@@ -6,6 +6,8 @@
 #include "Token.h"
 #include "TokenType.h"
 
+#include "Utilities.h"
+
 void DiagnosticBag::report(TextSpan span, std::string message) {
 	this->diagnostics.push_back(Diagnostic(span, message));
 }
@@ -30,13 +32,13 @@ void DiagnosticBag::report_bad_character(int start, char character) {
 
 void DiagnosticBag::report_bad_token(Token token) {
 	TextSpan span(token.span);
-	std::string message = "Bad Token. Expected primary, got <" + std::to_string(token.type) + '>';
+	std::string message = "Bad Token. Expected primary, got <" + Utilities::token_name(token.type) + '>';
 
 	this->report(span, message);
 }
 
 void DiagnosticBag::report_unexpected_token(TextSpan span, TokenType actual, TokenType expected) {
-	std::string message = "Unexpected Token. Expected <" + std::to_string(expected) + ", Actual<" + std::to_string(actual) + '>';
+	std::string message = "Unexpected Token. Expected <" + Utilities::token_name(expected) + ", Actual<" + Utilities::token_name(actual) + '>';
 
 	this->report(span, message);
 }
