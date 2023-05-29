@@ -23,7 +23,7 @@
 Parser::Parser(std::string text) {
 	Lexer lexer = Lexer(text);
 	this->tokens = lexer.tokenize();
-	this->diagnostics = lexer.diagnostics;
+	this->diagnostics.extend(lexer.diagnostics);
 	this->position = 0;
 }
 
@@ -79,9 +79,7 @@ std::shared_ptr<Expression> Parser::parse_primary() {
 
 	Token bad_token = this->next();
 
-	std::string message = "Bad Token. Expected primary, got " + std::to_string(bad_token.type);
-	this->diagnostics.push_back(message);
-
+	this->diagnostics.report_bad_token(bad_token);
 	return std::make_shared<BadExpression>(std::make_shared<Token>(bad_token));
 }
 
@@ -90,9 +88,7 @@ Token Parser::match(TokenType expression_type) {
 		return this->next();
 	}
 
-	std::string message = "Bad Token. Expected " + std::to_string(expression_type) + ", but instead got " + std::to_string(this->current().type);
-	this->diagnostics.push_back(message);
-
+	this->diagnostics.report_unexpected_token(this->current().span, this->current().type, expression_type);
 	return Token(expression_type, 0, "", nullptr);
 }
 

@@ -9,11 +9,13 @@
 #include "Token.h"
 #include "TokenType.h"
 
+#include "DiagnosticBag.h"
+
 class Parser {
 	std::vector<std::shared_ptr<Token>> tokens;
 	int position;
 public:
-	std::vector<std::string> diagnostics;
+	DiagnosticBag diagnostics;
 
 	Parser(std::string);
 	std::shared_ptr<Expression> parse();
