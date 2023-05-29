@@ -63,12 +63,52 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 
 			switch (bound_binary_expression->op->operator_type) {
 			case Addition:
+				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+					return std::any_cast<bool>(left) + std::any_cast<int>(right);
+				}
+				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+					return std::any_cast<int>(left) + std::any_cast<bool>(right);
+				}
+				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+					return std::any_cast<bool>(left) + std::any_cast<bool>(right);
+				}
+
 				return std::any_cast<int>(left) + std::any_cast<int>(right);
 			case Subtraction:
+				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+					return std::any_cast<bool>(left) - std::any_cast<int>(right);
+				}
+				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+					return std::any_cast<int>(left) - std::any_cast<bool>(right);
+				}
+				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+					return std::any_cast<bool>(left) - std::any_cast<bool>(right);
+				}
+
 				return std::any_cast<int>(left) - std::any_cast<int>(right);
 			case Multiplication:
+				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+					return std::any_cast<bool>(left) * std::any_cast<int>(right);
+				}
+				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+					return std::any_cast<int>(left) * std::any_cast<bool>(right);
+				}
+				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+					return std::any_cast<bool>(left) * std::any_cast<bool>(right);
+				}
+
 				return std::any_cast<int>(left) * std::any_cast<int>(right);
 			case Division:
+				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+					return std::any_cast<bool>(left) / std::any_cast<int>(right);
+				}
+				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+					return std::any_cast<int>(left) / std::any_cast<bool>(right);
+				}
+				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+					return std::any_cast<bool>(left) / std::any_cast<bool>(right);
+				}
+
 				return std::any_cast<int>(left) / std::any_cast<int>(right);
 			case LogicalAnd:
 				return std::any_cast<bool>(left) && std::any_cast<bool>(right);
