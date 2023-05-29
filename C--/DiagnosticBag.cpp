@@ -3,6 +3,9 @@
 
 #include "DiagnosticBag.h"
 
+#include "Token.h"
+#include "TokenType.h"
+
 void DiagnosticBag::report(TextSpan span, std::string message) {
 	this->diagnostics.push_back(Diagnostic(span, message));
 }
@@ -13,12 +16,27 @@ void DiagnosticBag::extend(const DiagnosticBag& bag) {
 
 void DiagnosticBag::report_invalid_number(int start, int length, std::string raw, const std::type_info& type) {
 	TextSpan span(start, length);
-	std::string message = "The number " + raw + " is not valid " + type.name();
+	std::string message = "The number <" + raw + " > is not valid <" + type.name() + '>';
+
 	this->report(span, message);
 }
 
 void DiagnosticBag::report_bad_character(int start, char character) {
 	TextSpan span(start, 1);
-	std::string message = "Bad character input: " + character;
+	std::string message = "Bad character input: <" + character + '>';
+
+	this->report(span, message);
+}
+
+void DiagnosticBag::report_bad_token(Token token) {
+	TextSpan span(token.span);
+	std::string message = "Bad Token. Expected primary, got <" + std::to_string(token.type) + '>';
+
+	this->report(span, message);
+}
+
+void DiagnosticBag::report_unexpected_token(TextSpan span, TokenType actual, TokenType expected) {
+	std::string message = "Unexpected Token. Expected <" + std::to_string(expected) + ", Actual<" + std::to_string(actual) + '>';
+
 	this->report(span, message);
 }

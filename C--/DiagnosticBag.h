@@ -6,6 +6,8 @@
 #include "TextSpan.h"
 #include "Diagnostic.h"
 
+#include "Token.h"
+
 class DiagnosticBag {
 	std::vector<Diagnostic> diagnostics;
 
@@ -15,6 +17,8 @@ public:
 
 	void report_invalid_number(int, int, std::string, const std::type_info&);
 	void report_bad_character(int, char);
-	
+
+	void report_bad_token(Token);
+	void report_unexpected_token(TextSpan, TokenType, TokenType);	
 };
 
