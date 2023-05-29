@@ -17,9 +17,11 @@
 
 #include "Token.h"
 
+#include "DiagnosticBag.h"
+
 class Binder {
 public:
-	std::vector<std::string> diagnostics;
+	DiagnosticBag diagnostics;
 	Binder(std::string);
 	std::shared_ptr<BoundExpression> bind();
 

@@ -27,7 +27,7 @@
 Binder::Binder(std::string line) {
 	Parser parser(line);
 	this->root = parser.parse();
-	this->diagnostics = parser.diagnostics;
+	this->diagnostics.extend(parser.diagnostics);
 }
 
 std::shared_ptr<BoundExpression> Binder::bind() {
@@ -63,6 +63,7 @@ std::shared_ptr<BoundExpression> Binder::bind_unary_expression(std::shared_ptr<U
 		BoundUnaryOperator::bind(expression->operator_token->type, bound_expression->type());
 
 	if (!bound_operator_optional.has_value()) {
+		this->diagnostics.report_undefined_unary_operator(*expression->operator_token.get(), bound_expression->type());
 		return bound_expression;
 	}
 
@@ -83,6 +84,7 @@ std::shared_ptr<BoundExpression> Binder::bind_binary_expression(std::shared_ptr<
 		BoundBinaryOperator::bind(expression->operator_token->type, left->type(), right->type());
 
 	if (!bound_operator_optional.has_value()) {
+		this->diagnostics.report_undefined_binary_operator(*expression->operator_token.get(), left->type(), right->type());
 		return left;
 	}
 
