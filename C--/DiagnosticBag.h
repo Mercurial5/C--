@@ -1,5 +1,6 @@
 #pragma once
 
+#include <typeinfo>
 #include <vector>
 
 #include "TextSpan.h"
@@ -10,6 +11,9 @@ class DiagnosticBag {
 
 	void report(TextSpan, std::string);
 public:
+
+	void report_invalid_number(int, int, std::string, const std::type_info&);
+	void report_bad_character(int, char);
 	
 };
 
