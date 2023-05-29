@@ -16,6 +16,11 @@
 #include "BoundUnaryOperator.h"
 #include "BoundBinaryOperator.h"
 
+#include "LiteralExpression.h"
+#include "UnaryExpression.h"
+#include "BinaryExpression.h"
+#include "ParenthesizedExpression.h"
+
 #include "ExpressionType.h"
 #include "TokenType.h"
 
@@ -40,6 +45,7 @@ std::shared_ptr<BoundExpression> Binder::bind_expression(std::shared_ptr<Express
 	case LiteralExpressionType: return this->bind_literal_expression(this->cast<LiteralExpression>(expression));
 	case UnaryExpressionType: return this->bind_unary_expression(this->cast<UnaryExpression>(expression));
 	case BinaryExpressionType: return this->bind_binary_expression(this->cast<BinaryExpression>(expression));
+	case ParenthesizedExpressionType: return this->bind_parenthesized_expression(this->cast<ParenthesizedExpression>(expression));
 	default: throw std::invalid_argument("Unexpected expression type in bind_expression");
 	}
 }
@@ -88,4 +94,13 @@ std::shared_ptr<BoundExpression> Binder::bind_binary_expression(std::shared_ptr<
 
 	std::shared_ptr<BoundBinaryOperator> bound_operator = bound_operator_optional.value();
 	return std::make_shared<BoundBinaryExpression>(left, bound_operator, right);
+}
+
+std::shared_ptr<BoundExpression> Binder::bind_parenthesized_expression(std::shared_ptr<ParenthesizedExpression> expression) {
+	if (!expression) {
+		throw std::invalid_argument("Received null expression in bind_parenthesized_expression");
+	}
+
+	std::shared_ptr<BoundExpression> bound_parenthesized_expression = this->bind_expression(expression->expression);
+	return bound_parenthesized_expression;
 }
