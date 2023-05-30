@@ -9,6 +9,7 @@
 #include "TokenType.h"
 #include "Token.h"
 
+#include "ExpressionTree.h"
 #include "ExpressionType.h"
 #include "Expression.h"
 
@@ -19,6 +20,8 @@
 
 #include "BoundExpression.h"
 
+#include "Compilation.h"
+
 #include "Utilities.h"
 
 int main() {
@@ -27,33 +30,25 @@ int main() {
 		std::cout << "> ";
 		std::getline(std::cin, line);
 
-		Binder binder = Binder(line);
-		std::shared_ptr<BoundExpression> root = binder.bind();
+		std::shared_ptr<ExpressionTree> tree = ExpressionTree::parse(line);
 
-		if (!binder.diagnostics.empty()) {
-			for (auto& diagnostic : binder.diagnostics) {
+		Compilation compilation(tree);
+		EvaluationResult result = compilation.evaluate();
+
+		if (!result.diagnostics.empty()) {
+			for (auto& diagnostic : result.diagnostics) {
 				std::cout << diagnostic << std::endl;
 			}
 			continue;
 		}
 
-		Utilities::print_bound_expression(root);
-
-		Evaluator evaluator;
-		std::any result = evaluator.evaluate_expression(root);
-
-		if (!evaluator.diagnostics.empty()) {
-			for (auto& diagnostic : evaluator.diagnostics) {
-				std::cout << diagnostic << std::endl;
-			}
-			continue;
+		Utilities::print_expression(tree->root);
+		
+		if (result.value.type() == typeid(bool)) {
+			std::cout << "= " << std::boolalpha << std::any_cast<bool>(result.value) << std::endl;
 		}
-
-		if (result.type() == typeid(bool)) {
-			std::cout << "= " << std::boolalpha << std::any_cast<bool>(result) << std::endl;
-		}
-		else if (result.type() == typeid(int)) {
-			std::cout << "= " << std::any_cast<int>(result) << std::endl;
+		else if (result.value.type() == typeid(int)) {
+			std::cout << "= " << std::any_cast<int>(result.value) << std::endl;
 		}
 		else {
 			std::cout << "This type is not supported" << std::endl;
