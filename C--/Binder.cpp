@@ -24,14 +24,12 @@
 #include "Utilities.h"
 
 
-Binder::Binder(std::string line) {
-	Parser parser(line);
-	this->root = parser.parse();
-	this->diagnostics.extend(parser.diagnostics);
+Binder::Binder(DiagnosticBag diagnostics) {
+	this->diagnostics.extend(diagnostics);
 }
 
-std::shared_ptr<BoundExpression> Binder::bind() {
-	return this->bind_expression(this->root);
+std::shared_ptr<BoundExpression> Binder::bind(std::shared_ptr<Expression> root) {
+	return this->bind_expression(root);
 }
 
 std::shared_ptr<BoundExpression> Binder::bind_expression(std::shared_ptr<Expression> expression) {
