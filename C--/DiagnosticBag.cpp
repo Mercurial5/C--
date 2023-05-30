@@ -31,7 +31,7 @@ Diagnostic* DiagnosticBag::end() {
 
 void DiagnosticBag::report_invalid_number(int start, int length, std::string raw, const std::type_info& type) {
 	TextSpan span(start, length);
-	std::string message = "The number <" + raw + " > is not valid <" + type.name() + '>';
+	std::string message = "The number <" + raw + "> is not valid <" + type.name() + '>';
 
 	this->report(span, message);
 }
@@ -51,7 +51,7 @@ void DiagnosticBag::report_bad_token(Token token) {
 }
 
 void DiagnosticBag::report_unexpected_token(TextSpan span, TokenType actual, TokenType expected) {
-	std::string message = "Unexpected Token. Expected <" + Utilities::token_name(expected) + ", Actual<" + Utilities::token_name(actual) + '>';
+	std::string message = "Unexpected Token. Expected <" + Utilities::token_name(expected) + ">, Actual <" + Utilities::token_name(actual) + '>';
 
 	this->report(span, message);
 }
