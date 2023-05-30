@@ -3,6 +3,7 @@
 #include <memory>
 #include <iostream>
 
+#include "ExpressionTree.h"
 #include "Expression.h"
 
 #include "LiteralExpression.h"
@@ -27,10 +28,11 @@ Parser::Parser(std::string text) {
 	this->position = 0;
 }
 
-std::shared_ptr<Expression> Parser::parse() {
-	std::shared_ptr<Expression> expression = this->parse_expression();
+std::shared_ptr<ExpressionTree> Parser::parse() {
+	std::shared_ptr<Expression> root = this->parse_expression();
+	Token end_of_file_token = this->match(EndOfFileToken);
 
-	return expression;
+	return std::make_shared<ExpressionTree>(this->diagnostics, root, std::make_shared<Token>(end_of_file_token));
 }
 
 std::shared_ptr<Expression> Parser::parse_expression(int parent_precedence) {
@@ -66,21 +68,23 @@ std::shared_ptr<Expression> Parser::parse_expression(int parent_precedence) {
 }
 
 std::shared_ptr<Expression> Parser::parse_primary() {
-	if (this->current().type == NumberToken || this->current().type == TrueKeywordToken || this->current().type == FalseKeywordToken) {
+	switch (this->current().type) {
+	case TrueKeywordToken:
+	case FalseKeywordToken:
 		return std::make_shared<LiteralExpression>(std::make_shared<Token>(this->next()));
-	}
 
-	if (this->current().type == OpenParenthesisToken) {
+	case OpenParenthesisToken: {
 		Token open = this->next();
 		std::shared_ptr<Expression> expression = this->parse_expression();
 		Token close = this->match(CloseParenthesisToken);
 		return std::make_shared<ParenthesizedExpression>(std::make_shared<Token>(open), expression, std::make_shared<Token>(close));
 	}
 
-	Token bad_token = this->next();
-
-	this->diagnostics.report_bad_token(bad_token);
-	return std::make_shared<BadExpression>(std::make_shared<Token>(bad_token));
+	default: {
+		Token current = this->match(NumberToken);
+		return std::make_shared<LiteralExpression>(std::make_shared<Token>(current));
+	}
+	}
 }
 
 Token Parser::match(TokenType expression_type) {

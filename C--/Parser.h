@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 
+#include "ExpressionTree.h"
 #include "Expression.h"
 
 #include "Token.h"
@@ -18,7 +19,7 @@ public:
 	DiagnosticBag diagnostics;
 
 	Parser(std::string);
-	std::shared_ptr<Expression> parse();
+	std::shared_ptr<ExpressionTree> parse();
 
 private:
 	std::shared_ptr<Expression> parse_expression(int = 0);
