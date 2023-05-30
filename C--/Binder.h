@@ -10,6 +10,7 @@
 #include "BoundUnaryOperatorType.h"
 #include "BoundBinaryOperatorType.h"
 
+#include "ExpressionTree.h"
 #include "Expression.h"
 #include "LiteralExpression.h"
 #include "UnaryExpression.h"
@@ -18,15 +19,15 @@
 
 #include "Token.h"
 
+#include "DiagnosticBag.h"
+
 class Binder {
 public:
-	std::vector<std::string> diagnostics;
-	Binder(std::string);
-	std::shared_ptr<BoundExpression> bind();
+	DiagnosticBag diagnostics;
+	std::shared_ptr<BoundExpression> bind(std::shared_ptr<Expression>);
+	Binder(DiagnosticBag);
 
 private:
-	std::shared_ptr<Expression> root;
-
 	std::shared_ptr<BoundExpression> bind_expression(std::shared_ptr<Expression>);
 	std::shared_ptr<BoundExpression> bind_literal_expression(std::shared_ptr<LiteralExpression>);
 	std::shared_ptr<BoundExpression> bind_unary_expression(std::shared_ptr<UnaryExpression>);

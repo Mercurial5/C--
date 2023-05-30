@@ -29,14 +29,12 @@
 #include "Utilities.h"
 
 
-Binder::Binder(std::string line) {
-	Parser parser(line);
-	this->root = parser.parse();
-	this->diagnostics = parser.diagnostics;
+Binder::Binder(DiagnosticBag diagnostics) {
+	this->diagnostics.extend(diagnostics);
 }
 
-std::shared_ptr<BoundExpression> Binder::bind() {
-	return this->bind_expression(this->root);
+std::shared_ptr<BoundExpression> Binder::bind(std::shared_ptr<Expression> root) {
+	return this->bind_expression(root);
 }
 
 std::shared_ptr<BoundExpression> Binder::bind_expression(std::shared_ptr<Expression> expression) {
@@ -69,6 +67,7 @@ std::shared_ptr<BoundExpression> Binder::bind_unary_expression(std::shared_ptr<U
 		BoundUnaryOperator::bind(expression->operator_token->type, bound_expression->type());
 
 	if (!bound_operator_optional.has_value()) {
+		this->diagnostics.report_undefined_unary_operator(*expression->operator_token.get(), bound_expression->type());
 		return bound_expression;
 	}
 
@@ -89,6 +88,7 @@ std::shared_ptr<BoundExpression> Binder::bind_binary_expression(std::shared_ptr<
 		BoundBinaryOperator::bind(expression->operator_token->type, left->type(), right->type());
 
 	if (!bound_operator_optional.has_value()) {
+		this->diagnostics.report_undefined_binary_operator(*expression->operator_token.get(), left->type(), right->type());
 		return left;
 	}
 

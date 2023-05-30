@@ -52,6 +52,18 @@
     <Filter Include="Source Files\Frontend\Binding\Operators">
       <UniqueIdentifier>{8c8116d4-f067-4769-add3-4cb645c306be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{a8924d75-e674-4072-acc1-7a8ae9bdcbe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Diagnostics">
+      <UniqueIdentifier>{7d151a19-7a06-403f-8239-c6550872023a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{71361236-2c11-4a93-9900-18a3997602ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common\Diagnostics">
+      <UniqueIdentifier>{081b56e1-c868-45ba-befb-7b2486b20a6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,9 +102,6 @@
     <ClCompile Include="LiteralExpression.cpp">
       <Filter>Source Files\Frontend\Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Binder.cpp">
       <Filter>Source Files\Frontend\Binding</Filter>
     </ClCompile>
@@ -113,6 +122,27 @@
     </ClCompile>
     <ClCompile Include="BoundUnaryOperator.cpp">
       <Filter>Source Files\Frontend\Binding\Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="Diagnostic.cpp">
+      <Filter>Source Files\Common\Diagnostics</Filter>
+    </ClCompile>
+    <ClCompile Include="DiagnosticBag.cpp">
+      <Filter>Source Files\Common\Diagnostics</Filter>
+    </ClCompile>
+    <ClCompile Include="TextSpan.cpp">
+      <Filter>Source Files\Common\Diagnostics</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Compilation.cpp">
+      <Filter>Source Files\Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionTree.cpp">
+      <Filter>Source Files\Frontend\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="EvaluationResult.cpp">
+      <Filter>Source Files\Backend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,9 +185,6 @@
     <ClInclude Include="ParserRules.h">
       <Filter>Header Files\Frontend</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Binder.h">
       <Filter>Header Files\Frontend\Binding</Filter>
     </ClInclude>
@@ -187,6 +214,27 @@
     </ClInclude>
     <ClInclude Include="BoundUnaryOperator.h">
       <Filter>Header Files\Frontend\Binding\Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="Diagnostic.h">
+      <Filter>Header Files\Common\Diagnostics</Filter>
+    </ClInclude>
+    <ClInclude Include="DiagnosticBag.h">
+      <Filter>Header Files\Common\Diagnostics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextSpan.h">
+      <Filter>Header Files\Common\Diagnostics</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionTree.h">
+      <Filter>Header Files\Frontend\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="EvaluationResult.h">
+      <Filter>Header Files\Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilation.h">
+      <Filter>Header Files\Frontend</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

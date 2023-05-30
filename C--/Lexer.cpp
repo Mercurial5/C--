@@ -7,6 +7,8 @@
 
 #include "ParserRules.h"
 
+#include "TextSpan.h"
+
 Lexer::Lexer(const std::string text) {
 	this->text = text;
 	this->position = 0;
@@ -27,12 +29,32 @@ std::vector<std::shared_ptr<Token>> Lexer::tokenize() {
 	return tokens;
 }
 
+std::optional<int> Lexer::parse_int(std::string str) {
+	try {
+		int value = stoi(str);
+		return value;
+	}
+	catch (std::out_of_range) {
+		return std::nullopt;
+	}
+}
+
 Token Lexer::get_token() {
 	if (isdigit(this->peek())) {
 		int start = this->position;
 		int length = this->eat_until(isdigit);
 		std::string raw = this->text.substr(start, length);
-		int value = stoi(raw);
+
+		std::optional<int> value_optional = this->parse_int(raw);
+
+		int value = 0;
+		if (!value_optional.has_value()) {
+			this->diagnostics.report_invalid_number(start, length, raw, typeid(int));
+		}
+		else {
+			value = value_optional.value();
+		}
+
 		return Token(NumberToken, start, raw, std::make_any<int>(value));
 	}
 
@@ -96,8 +118,7 @@ Token Lexer::get_token() {
 	}
 	}
 
-	std::string message = "Bad character at position " + std::to_string(this->position);
-	this->diagnostics.push_back(message);
+	this->diagnostics.report_bad_character(this->position, current);
 	return Token(BadToken, this->next(), current, nullptr);
 }
 

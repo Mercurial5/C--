@@ -1,6 +1,8 @@
 #include "Token.h"
 
-Token::Token(TokenType type, int position, std::string raw, std::any value) {
+#include "TextSpan.h"
+
+Token::Token(TokenType type, int position, std::string raw, std::any value) : span(position, raw.size()) {
 	this->type = type;
 	this->position = position;
 	this->raw = raw;

@@ -4,19 +4,22 @@
 #include <vector>
 #include <memory>
 
+#include "ExpressionTree.h"
 #include "Expression.h"
 
 #include "Token.h"
 #include "TokenType.h"
 
+#include "DiagnosticBag.h"
+
 class Parser {
 	std::vector<std::shared_ptr<Token>> tokens;
 	int position;
 public:
-	std::vector<std::string> diagnostics;
+	DiagnosticBag diagnostics;
 
 	Parser(std::string);
-	std::shared_ptr<Expression> parse();
+	std::shared_ptr<ExpressionTree> parse();
 
 private:
 	std::shared_ptr<Expression> parse_expression(int = 0);
