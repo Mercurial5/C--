@@ -137,10 +137,13 @@
     <ClCompile Include="BoundLiteralExpression.cpp" />
     <ClCompile Include="BoundUnaryExpression.cpp" />
     <ClCompile Include="BoundUnaryOperator.cpp" />
+    <ClCompile Include="Compilation.cpp" />
     <ClCompile Include="Diagnostic.cpp" />
     <ClCompile Include="DiagnosticBag.cpp" />
+    <ClCompile Include="EvaluationResult.cpp" />
     <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="Expression.cpp" />
+    <ClCompile Include="ExpressionTree.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="LiteralExpression.cpp" />
@@ -165,10 +168,13 @@
     <ClInclude Include="BoundUnaryExpression.h" />
     <ClInclude Include="BoundUnaryOperator.h" />
     <ClInclude Include="BoundUnaryOperatorType.h" />
+    <ClInclude Include="Compilation.h" />
     <ClInclude Include="Diagnostic.h" />
     <ClInclude Include="DiagnosticBag.h" />
+    <ClInclude Include="EvaluationResult.h" />
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="Expression.h" />
+    <ClInclude Include="ExpressionTree.h" />
     <ClInclude Include="ExpressionType.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="LiteralExpression.h" />
