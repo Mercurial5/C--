@@ -17,6 +17,7 @@ enum TokenType {
 	MinusToken,
 	StarToken,
 	SlashToken,
+	EqualToken,
 
 	// Logical operators
 	ExclamationToken,

@@ -90,8 +90,7 @@ Token Lexer::get_token() {
 			this->next(); this->next();
 			return Token(ExclamationEqualToken, start, "!=", nullptr);
 		}
-		else
-		{
+		else {
 			return Token(ExclamationToken, this->next(), current, nullptr);
 		}
 	}
@@ -114,6 +113,9 @@ Token Lexer::get_token() {
 			int start = this->position;
 			this->next(); this->next();
 			return Token(DoubleEqualToken, start, "==", nullptr);
+		}
+		else {
+			return Token(EqualToken, this->next(), current, nullptr);
 		}
 	}
 	}
