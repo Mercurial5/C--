@@ -24,7 +24,11 @@
 
 #include "Utilities.h"
 
+#include <windows.h>
+
 int main() {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	while (true) {
 		std::string line;
 		std::cout << "> ";
@@ -37,7 +41,20 @@ int main() {
 
 		if (!result.diagnostics.empty()) {
 			for (auto& diagnostic : result.diagnostics) {
-				std::cout << diagnostic << std::endl;
+				std::string prefix = line.substr(0, diagnostic.span.start);
+				std::string error = line.substr(diagnostic.span.start, diagnostic.span.length);
+				std::string suffix = line.substr(diagnostic.span.end);
+
+				std::cout << std::endl << diagnostic << std::endl;
+
+				std::cout << '\t' << prefix;
+
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+				std::cout << error;
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+				
+				std::cout << suffix << std::endl;
+				
 			}
 			continue;
 		}
