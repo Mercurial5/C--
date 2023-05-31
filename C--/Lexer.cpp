@@ -100,6 +100,7 @@ Token Lexer::get_token() {
 			this->next(); this->next();
 			return Token(DoubleAmpersandToken, start, "&&", nullptr);
 		}
+		break;
 	}
 	case '|': {
 		if (this->peek(1) == '|') {
@@ -107,6 +108,7 @@ Token Lexer::get_token() {
 			this->next(); this->next();
 			return Token(DoublePipeToken, start, "||", nullptr);
 		}
+		break;
 	}
 	case '=': {
 		if (this->peek(1) == '=') {
@@ -130,11 +132,11 @@ bool Lexer::is_token_skipable(const Token& token) {
 
 char Lexer::peek(int offset) {
 	int position = this->position + offset;
-	if (position > this->text.size()) {
-		return this->text[this->text.size() - 1];
+	if (position >= this->text.size()) {
+		return '\0';
 	}
 
-	return this->text[this->position];
+	return this->text[position];
 }
 
 int Lexer::next() {
