@@ -25,6 +25,7 @@
 #include "Utilities.h"
 
 int main() {
+	std::map<std::string, std::any> variables;
 	while (true) {
 		std::string line;
 		std::cout << "> ";
@@ -33,7 +34,7 @@ int main() {
 		std::shared_ptr<ExpressionTree> tree = ExpressionTree::parse(line);
 
 		Compilation compilation(tree);
-		EvaluationResult result = compilation.evaluate();
+		EvaluationResult result = compilation.evaluate(variables);
 
 		if (!result.diagnostics.empty()) {
 			for (auto& diagnostic : result.diagnostics) {
