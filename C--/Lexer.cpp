@@ -40,8 +40,8 @@ std::optional<int> Lexer::parse_int(std::string str) {
 }
 
 Token Lexer::get_token() {
+	int start = this->position;
 	if (isdigit(this->peek())) {
-		int start = this->position;
 		int length = this->eat_until(isdigit);
 		std::string raw = this->text.substr(start, length);
 
@@ -59,7 +59,6 @@ Token Lexer::get_token() {
 	}
 
 	if (isspace(this->peek())) {
-		int start = this->position;
 		int length = this->eat_until(isspace);
 		// Is there a point of this? I didn't saw it, so it stays in comment
 		// std::string raw = this->text.substr(start, length);
@@ -67,7 +66,6 @@ Token Lexer::get_token() {
 	}
 
 	if (isalpha(this->peek())) {
-		int start = this->position;
 		int length = this->eat_until(isalpha);
 
 		std::string raw = this->text.substr(start, length);
@@ -86,7 +84,6 @@ Token Lexer::get_token() {
 	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);
 	case '!': {
 		if (this->peek(1) == '=') {
-			int start = this->position;
 			this->next(); this->next();
 			return Token(ExclamationEqualToken, start, "!=", nullptr);
 		}
@@ -96,7 +93,6 @@ Token Lexer::get_token() {
 	}
 	case '&': {
 		if (this->peek(1) == '&') {
-			int start = this->position;
 			this->next(); this->next();
 			return Token(DoubleAmpersandToken, start, "&&", nullptr);
 		}
@@ -104,7 +100,6 @@ Token Lexer::get_token() {
 	}
 	case '|': {
 		if (this->peek(1) == '|') {
-			int start = this->position;
 			this->next(); this->next();
 			return Token(DoublePipeToken, start, "||", nullptr);
 		}
@@ -112,7 +107,6 @@ Token Lexer::get_token() {
 	}
 	case '=': {
 		if (this->peek(1) == '=') {
-			int start = this->position;
 			this->next(); this->next();
 			return Token(DoubleEqualToken, start, "==", nullptr);
 		}
