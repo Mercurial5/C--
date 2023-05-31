@@ -27,5 +27,6 @@ public:
 
 	void report_undefined_unary_operator(Token, const std::type_info&);
 	void report_undefined_binary_operator(Token, const std::type_info&, const std::type_info&);
+	void report_undefined_name(TextSpan, std::string);
 };
 
