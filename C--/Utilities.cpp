@@ -9,6 +9,8 @@
 #include "UnaryExpression.h"
 #include "BinaryExpression.h"
 #include "ParenthesizedExpression.h"
+#include "NameExpression.h"
+#include "AssignmentExpression.h"
 
 #include "BoundExpression.h"
 #include "BoundLiteralExpression.h"
@@ -44,6 +46,8 @@ std::map<int, std::string> Utilities::EXPRESSION_TYPE_MAPPER = {
 		{ UnaryExpressionType, "UnaryExpressionType" },
 		{ BinaryExpressionType, "BinaryExpressionType" },
 		{ ParenthesizedExpressionType, "ParenthesizedExpressionType" },
+		{ NameExpressionType, "NameExpressionType" },
+		{ AssignmentExpressionType, "AssignmentExpressionType" },
 		{ BadExpressionType, "BadExpressionType" }
 };
 
@@ -88,7 +92,7 @@ std::string Utilities::bound_binary_operator_name(BoundBinaryOperatorType bound_
 	return Utilities::BOUND_BINARY_OPERATOR_TYPE_MAPPER[bound_binary_operator_type];
 }
 
-std::string Utilities::bound_expression_name(BoundExpressionType bound_expression_type) 
+std::string Utilities::bound_expression_name(BoundExpressionType bound_expression_type)
 {
 	return Utilities::BOUND_EXPRESSION_TYPE[bound_expression_type];
 }
@@ -103,6 +107,23 @@ void Utilities::print_expression(std::shared_ptr<Expression> expression, std::st
 		// Only if number expression is not nullptr (Dynamic cast was successfull)
 		if (literal_expression) {
 			std::cout << indent << literal_expression->token->raw << std::endl;
+		}
+	}
+	else if (expression->type == NameExpressionType) {
+		std::shared_ptr<NameExpression> name_expression = dynamic_pointer_cast<NameExpression>(expression);
+
+		if (name_expression) {
+			std::cout << indent << name_expression->identifier_token->raw << std::endl;
+		}
+	}
+	else if (expression->type == AssignmentExpressionType) {
+		std::shared_ptr<AssignmentExpression> assignment_expression = dynamic_pointer_cast<AssignmentExpression>(expression);
+
+		if (assignment_expression) {
+			std::cout << indent << "Variable:" << std::endl;
+			std::cout << indent << '\t' << assignment_expression->identifier_token->raw << std::endl;
+			std::cout << indent << "Value:" << std::endl;
+			print_expression(assignment_expression->expression, indent + '\t');
 		}
 	}
 	else if (expression->type == UnaryExpressionType) {
@@ -121,7 +142,7 @@ void Utilities::print_expression(std::shared_ptr<Expression> expression, std::st
 		if (binary_expression) {
 			print_expression(binary_expression->left, indent);
 			std::cout << indent << "Operator Token:" << std::endl;
-			std::cout << indent + '\t' << binary_expression->operator_token->raw << std::endl;
+			std::cout << indent << '\t' << binary_expression->operator_token->raw << std::endl;
 			print_expression(binary_expression->right, indent);
 		}
 	}
@@ -154,7 +175,7 @@ void Utilities::print_bound_expression(std::shared_ptr<BoundExpression> expressi
 				std::cout << indent << std::boolalpha << std::any_cast<bool>(bound_literal_expression->value) << std::endl;
 			}
 		}
-	} 
+	}
 	else if (expression->expression_type == BoundUnaryExpressionType) {
 		std::shared_ptr<BoundUnaryExpression> bound_unary_expression = dynamic_pointer_cast<BoundUnaryExpression>(expression);
 
