@@ -67,3 +67,9 @@ void DiagnosticBag::report_undefined_binary_operator(Token operator_token, const
 
 	this->report(operator_token.span, message);
 }
+
+void DiagnosticBag::report_undefined_name(TextSpan span, std::string name) {
+	std::string message = "Variable <" + name + "> does not exists";
+
+	this->report(span, message);
+}

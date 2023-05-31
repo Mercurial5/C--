@@ -128,15 +128,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssignmentExpression.cpp" />
     <ClCompile Include="BadExpression.cpp" />
     <ClCompile Include="BinaryExpression.cpp" />
     <ClCompile Include="Binder.cpp" />
+    <ClCompile Include="BoundAssignmentExpression.cpp" />
     <ClCompile Include="BoundBinaryExpression.cpp" />
     <ClCompile Include="BoundBinaryOperator.cpp" />
     <ClCompile Include="BoundExpression.cpp" />
     <ClCompile Include="BoundLiteralExpression.cpp" />
     <ClCompile Include="BoundUnaryExpression.cpp" />
     <ClCompile Include="BoundUnaryOperator.cpp" />
+    <ClCompile Include="BoundVariableExpression.cpp" />
     <ClCompile Include="Compilation.cpp" />
     <ClCompile Include="Diagnostic.cpp" />
     <ClCompile Include="DiagnosticBag.cpp" />
@@ -147,6 +150,7 @@
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="LiteralExpression.cpp" />
+    <ClCompile Include="NameExpression.cpp" />
     <ClCompile Include="ParenthesizedExpression.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserRules.cpp" />
@@ -156,9 +160,11 @@
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssignmentExpression.h" />
     <ClInclude Include="BadExpression.h" />
     <ClInclude Include="BinaryExpression.h" />
     <ClInclude Include="Binder.h" />
+    <ClInclude Include="BoundAssignmentExpression.h" />
     <ClInclude Include="BoundBinaryExpression.h" />
     <ClInclude Include="BoundBinaryOperator.h" />
     <ClInclude Include="BoundBinaryOperatorType.h" />
@@ -168,6 +174,7 @@
     <ClInclude Include="BoundUnaryExpression.h" />
     <ClInclude Include="BoundUnaryOperator.h" />
     <ClInclude Include="BoundUnaryOperatorType.h" />
+    <ClInclude Include="BoundVariableExpression.h" />
     <ClInclude Include="Compilation.h" />
     <ClInclude Include="Diagnostic.h" />
     <ClInclude Include="DiagnosticBag.h" />
@@ -178,6 +185,7 @@
     <ClInclude Include="ExpressionType.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="LiteralExpression.h" />
+    <ClInclude Include="NameExpression.h" />
     <ClInclude Include="ParenthesizedExpression.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ParserRules.h" />

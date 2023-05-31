@@ -1,7 +1,9 @@
 #include <stdexcept>
+#include <algorithm>
 #include <memory>
 #include <string>
-#include <algorithm>
+#include <map>
+#include <any>
 
 #include "Evaluator.h"
 
@@ -9,6 +11,8 @@
 #include "BoundExpressionType.h"
 
 #include "BoundLiteralExpression.h"
+#include "BoundVariableExpression.h"
+#include "BoundAssignmentExpression.h"
 
 #include "BoundUnaryExpression.h"
 #include "BoundUnaryOperatorType.h"
@@ -16,9 +20,12 @@
 #include "BoundBinaryExpression.h"
 #include "BoundBinaryOperatorType.h"
 
+
 #include "Utilities.h"
 
-Evaluator::Evaluator() {}
+Evaluator::Evaluator(std::map<std::string, std::any>& variables) {
+	this->variables = &variables;
+}
 
 
 std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> expression) {
@@ -30,6 +37,25 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 			return bound_literal_expression->value;
 		}
 	}
+
+	if (expression->expression_type == BoundVariableExpressionType) {
+		std::shared_ptr<BoundVariableExpression> bound_variable_expression = std::dynamic_pointer_cast<BoundVariableExpression>(expression);
+
+		if (bound_variable_expression) {
+			return (*this->variables)[bound_variable_expression->name];
+		}
+	}
+
+	if (expression->expression_type == BoundAssignmentExpressionType) {
+		std::shared_ptr<BoundAssignmentExpression> bound_assignment_expression = std::dynamic_pointer_cast<BoundAssignmentExpression>(expression);
+
+		if (bound_assignment_expression) {
+			std::any value = this->evaluate_expression(bound_assignment_expression->expression);
+			(*this->variables)[bound_assignment_expression->name] = value;
+			return value;
+		}
+	}
+
 
 	if (expression->expression_type == BoundUnaryExpressionType) {
 		std::shared_ptr<BoundUnaryExpression> bound_unary_expression = std::dynamic_pointer_cast<BoundUnaryExpression>(expression);

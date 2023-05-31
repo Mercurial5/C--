@@ -2,6 +2,8 @@
 #include <typeinfo>
 #include <optional>
 #include <string>
+#include <map>
+#include <any>
 
 #include "Binder.h"
 
@@ -9,6 +11,8 @@
 #include "BoundLiteralExpression.h"
 #include "BoundUnaryExpression.h"
 #include "BoundBinaryExpression.h"
+#include "BoundVariableExpression.h"
+#include "BoundAssignmentExpression.h"
 
 #include "BoundUnaryOperatorType.h"
 #include "BoundBinaryOperatorType.h"
@@ -20,6 +24,8 @@
 #include "UnaryExpression.h"
 #include "BinaryExpression.h"
 #include "ParenthesizedExpression.h"
+#include "NameExpression.h"
+#include "AssignmentExpression.h"
 
 #include "ExpressionType.h"
 #include "TokenType.h"
@@ -29,8 +35,9 @@
 #include "Utilities.h"
 
 
-Binder::Binder(DiagnosticBag diagnostics) {
+Binder::Binder(DiagnosticBag diagnostics, std::map<std::string, std::any>& variables) {
 	this->diagnostics.extend(diagnostics);
+	this->variables = &variables;
 }
 
 std::shared_ptr<BoundExpression> Binder::bind(std::shared_ptr<Expression> root) {
@@ -44,6 +51,8 @@ std::shared_ptr<BoundExpression> Binder::bind_expression(std::shared_ptr<Express
 	case UnaryExpressionType: return this->bind_unary_expression(this->cast<UnaryExpression>(expression));
 	case BinaryExpressionType: return this->bind_binary_expression(this->cast<BinaryExpression>(expression));
 	case ParenthesizedExpressionType: return this->bind_parenthesized_expression(this->cast<ParenthesizedExpression>(expression));
+	case NameExpressionType: return this->bind_name_expression(this->cast<NameExpression>(expression));
+	case AssignmentExpressionType: return this->bind_assignment_expression(this->cast<AssignmentExpression>(expression));
 	default: throw std::invalid_argument("Unexpected expression type in bind_expression");
 	}
 }
@@ -103,4 +112,31 @@ std::shared_ptr<BoundExpression> Binder::bind_parenthesized_expression(std::shar
 
 	std::shared_ptr<BoundExpression> bound_parenthesized_expression = this->bind_expression(expression->expression);
 	return bound_parenthesized_expression;
+}
+
+std::shared_ptr<BoundExpression> Binder::bind_name_expression(std::shared_ptr<NameExpression> expression) {
+	if (!expression) {
+		throw std::invalid_argument("Received null expression in bind_name_expression");
+	}
+
+	std::string name = expression->identifier_token->raw;
+	if (this->variables->find(name) == end(*this->variables)) {
+		this->diagnostics.report_undefined_name(expression->identifier_token->span, name);
+		return std::make_shared<BoundLiteralExpression>(0);
+	}
+
+	std::any value = (*this->variables)[name];
+	const std::type_info& type = value.type();
+	return std::make_shared<BoundVariableExpression>(name, &type);
+}
+
+std::shared_ptr<BoundExpression> Binder::bind_assignment_expression(std::shared_ptr<AssignmentExpression> expression) {
+	if (!expression) {
+		throw std::invalid_argument("Received null expression in bind_assignment_expression");
+	}
+
+	std::string name = expression->identifier_token->raw;
+	std::shared_ptr<BoundExpression> bound_expression = this->bind_expression(expression->expression);
+
+	return std::make_shared<BoundAssignmentExpression>(name, bound_expression);
 }

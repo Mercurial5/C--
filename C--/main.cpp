@@ -27,6 +27,7 @@
 #include <windows.h>
 
 int main() {
+	std::map<std::string, std::any> variables;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	while (true) {
@@ -37,7 +38,7 @@ int main() {
 		std::shared_ptr<ExpressionTree> tree = ExpressionTree::parse(line);
 
 		Compilation compilation(tree);
-		EvaluationResult result = compilation.evaluate();
+		EvaluationResult result = compilation.evaluate(variables);
 
 		if (!result.diagnostics.empty()) {
 			for (auto& diagnostic : result.diagnostics) {

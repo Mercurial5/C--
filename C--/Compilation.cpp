@@ -1,4 +1,7 @@
 #include <memory>
+#include <string>
+#include <map>
+#include <any>
 
 #include "Compilation.h"
 #include "Binder.h"
@@ -11,15 +14,15 @@ Compilation::Compilation(std::shared_ptr<ExpressionTree> tree) {
 	this->tree = tree;
 }
 
-EvaluationResult Compilation::evaluate() {
-	Binder binder(this->tree->diagnostics);
+EvaluationResult Compilation::evaluate(std::map<std::string, std::any>& variables) {
+	Binder binder(this->tree->diagnostics, variables);
 	std::shared_ptr<BoundExpression> bound_expression = binder.bind(this->tree->root);
 
 	if (!binder.diagnostics.empty()) {
 		return EvaluationResult(binder.diagnostics, std::any());
 	}
 
-	Evaluator evaluator;
+	Evaluator evaluator(variables);
 	std::any value = evaluator.evaluate_expression(bound_expression);
 
 	return EvaluationResult(DiagnosticBag(), value);

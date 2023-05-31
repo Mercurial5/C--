@@ -87,8 +87,7 @@ Token Lexer::get_token() {
 			this->next(); this->next();
 			return Token(ExclamationEqualToken, start, "!=", nullptr);
 		}
-		else
-		{
+		else {
 			return Token(ExclamationToken, this->next(), current, nullptr);
 		}
 	}
@@ -97,17 +96,22 @@ Token Lexer::get_token() {
 			this->next(); this->next();
 			return Token(DoubleAmpersandToken, start, "&&", nullptr);
 		}
+		break;
 	}
 	case '|': {
 		if (this->peek(1) == '|') {
 			this->next(); this->next();
 			return Token(DoublePipeToken, start, "||", nullptr);
 		}
+		break;
 	}
 	case '=': {
 		if (this->peek(1) == '=') {
 			this->next(); this->next();
 			return Token(DoubleEqualToken, start, "==", nullptr);
+		}
+		else {
+			return Token(EqualToken, this->next(), current, nullptr);
 		}
 	}
 	}
@@ -122,11 +126,11 @@ bool Lexer::is_token_skipable(const Token& token) {
 
 char Lexer::peek(int offset) {
 	int position = this->position + offset;
-	if (position > this->text.size()) {
-		return this->text[this->text.size() - 1];
+	if (position >= this->text.size()) {
+		return '\0';
 	}
 
-	return this->text[this->position];
+	return this->text[position];
 }
 
 int Lexer::next() {

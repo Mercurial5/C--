@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <map>
+#include <any>
 
 #include "ExpressionTree.h"
 #include "EvaluationResult.h"
@@ -12,6 +15,6 @@ class Compilation {
 public:
 	Compilation(std::shared_ptr<ExpressionTree>);
 
-	EvaluationResult evaluate();
+	EvaluationResult evaluate(std::map<std::string, std::any>&);
 };
 

@@ -22,9 +22,12 @@ public:
 	std::shared_ptr<ExpressionTree> parse();
 
 private:
-	std::shared_ptr<Expression> parse_expression(int = 0);
+	std::shared_ptr<Expression> parse_expression();
+	std::shared_ptr<Expression> parse_assignment_expression();
+	std::shared_ptr<Expression> parse_binary_expression(int = 0);
 	std::shared_ptr<Expression> parse_primary();
 
+	Token peek(int = 0);
 	Token match(TokenType);
 	Token current();
 	Token next();
