@@ -3,5 +3,7 @@
 enum BoundExpressionType {
 	BoundLiteralExpressionType,
 	BoundUnaryExpressionType,
-	BoundBinaryExpressionType
+	BoundBinaryExpressionType,
+	BoundVariableExpressionType,
+	BoundAssignmentExpressionType,
 };
