@@ -144,6 +144,21 @@
     <ClCompile Include="EvaluationResult.cpp">
       <Filter>Source Files\Backend</Filter>
     </ClCompile>
+    <ClCompile Include="BoundAssignmentExpression.cpp">
+      <Filter>Source Files\Frontend\Binding\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundVariableExpression.cpp">
+      <Filter>Source Files\Frontend\Binding\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="AssignmentExpression.cpp">
+      <Filter>Source Files\Frontend\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="NameExpression.cpp">
+      <Filter>Source Files\Frontend\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="VariableSymbol.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TokenType.h">
@@ -235,6 +250,21 @@
     </ClInclude>
     <ClInclude Include="Compilation.h">
       <Filter>Header Files\Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableSymbol.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AssignmentExpression.h">
+      <Filter>Header Files\Frontend\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="NameExpression.h">
+      <Filter>Header Files\Frontend\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundVariableExpression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundAssignmentExpression.h">
+      <Filter>Header Files\Frontend\Binding\Expressions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
