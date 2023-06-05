@@ -7,6 +7,7 @@
 #include "Diagnostic.h"
 
 #include "Token.h"
+#include "TokenType.h"
 
 class DiagnosticBag {
 	std::vector<Diagnostic> diagnostics;
