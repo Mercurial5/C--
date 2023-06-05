@@ -10,11 +10,13 @@
 
 #include "BoundExpression.h"
 
+#include "VariableSymbol.h"
+
 Compilation::Compilation(std::shared_ptr<ExpressionTree> tree) {
 	this->tree = tree;
 }
 
-EvaluationResult Compilation::evaluate(std::map<std::string, std::any>& variables) {
+EvaluationResult Compilation::evaluate(std::map<std::shared_ptr<VariableSymbol>, std::any>& variables) {
 	Binder binder(this->tree->diagnostics, variables);
 	std::shared_ptr<BoundExpression> bound_expression = binder.bind(this->tree->root);
 

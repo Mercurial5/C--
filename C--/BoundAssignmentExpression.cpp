@@ -3,8 +3,9 @@
 #include "BoundExpression.h"
 #include "BoundExpressionType.h"
 
-BoundAssignmentExpression::BoundAssignmentExpression(std::string name, std::shared_ptr<BoundExpression> bound_expression) : BoundExpression(BoundAssignmentExpressionType) {
-	this->name = name;
+BoundAssignmentExpression::BoundAssignmentExpression(std::shared_ptr<VariableSymbol> variable, std::shared_ptr<BoundExpression> bound_expression) : 
+	BoundExpression(BoundAssignmentExpressionType) {
+	this->variable = variable;
 	this->expression = bound_expression;
 }
 

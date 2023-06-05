@@ -20,10 +20,11 @@
 #include "BoundBinaryExpression.h"
 #include "BoundBinaryOperatorType.h"
 
+#include "VariableSymbol.h"
 
 #include "Utilities.h"
 
-Evaluator::Evaluator(std::map<std::string, std::any>& variables) {
+Evaluator::Evaluator(std::map<std::shared_ptr<VariableSymbol>, std::any>& variables) {
 	this->variables = &variables;
 }
 
@@ -42,7 +43,7 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 		std::shared_ptr<BoundVariableExpression> bound_variable_expression = std::dynamic_pointer_cast<BoundVariableExpression>(expression);
 
 		if (bound_variable_expression) {
-			return (*this->variables)[bound_variable_expression->name];
+			return (*this->variables)[bound_variable_expression->variable];
 		}
 	}
 
@@ -51,7 +52,7 @@ std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> express
 
 		if (bound_assignment_expression) {
 			std::any value = this->evaluate_expression(bound_assignment_expression->expression);
-			(*this->variables)[bound_assignment_expression->name] = value;
+			(*this->variables)[bound_assignment_expression->variable] = value;
 			return value;
 		}
 	}

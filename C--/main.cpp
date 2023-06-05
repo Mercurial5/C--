@@ -20,6 +20,8 @@
 
 #include "BoundExpression.h"
 
+#include "VariableSymbol.h"
+
 #include "Compilation.h"
 
 #include "Utilities.h"
@@ -27,7 +29,7 @@
 #include <windows.h>
 
 int main() {
-	std::map<std::string, std::any> variables;
+	std::map<std::shared_ptr<VariableSymbol>, std::any> variables;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	while (true) {

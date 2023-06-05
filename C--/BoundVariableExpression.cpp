@@ -3,12 +3,10 @@
 #include "BoundExpression.h"
 #include "BoundExpressionType.h"
 
-BoundVariableExpression::BoundVariableExpression(std::string name, const std::type_info* type) : BoundExpression(BoundVariableExpressionType) {
-	this->name = name;
-	this->_type = type;
-	
+BoundVariableExpression::BoundVariableExpression(std::shared_ptr<VariableSymbol> variable) : BoundExpression(BoundVariableExpressionType) {
+	this->variable = variable;
 }
 
 const std::type_info& BoundVariableExpression::type() {
-	return *this->_type;
+	return *this->variable->type;
 }
