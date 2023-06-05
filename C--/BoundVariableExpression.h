@@ -1,16 +1,18 @@
 #pragma once
 
 #include <typeinfo>
+#include <memory>
 #include <string>
 
 #include "BoundExpression.h"
 
+#include "VariableSymbol.h"
+
 class BoundVariableExpression : public BoundExpression {
 public:
-	std::string name;
-	const std::type_info* _type;
+	std::shared_ptr<VariableSymbol> variable;
 
-	BoundVariableExpression(std::string, const std::type_info*);
+	BoundVariableExpression(std::shared_ptr<VariableSymbol>);
 	virtual const std::type_info& type() override;
 };
 

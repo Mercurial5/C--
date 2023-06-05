@@ -158,6 +158,7 @@
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="UnaryExpression.cpp" />
     <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="VariableSymbol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssignmentExpression.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="TokenType.h" />
     <ClInclude Include="UnaryExpression.h" />
     <ClInclude Include="Utilities.h" />
+    <ClInclude Include="VariableSymbol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
