@@ -29,137 +29,146 @@ Evaluator::Evaluator(std::map<std::string, std::any>& variables) {
 
 
 std::any Evaluator::evaluate_expression(std::shared_ptr<BoundExpression> expression) {
-	if (expression->expression_type == BoundLiteralExpressionType) {
-		std::shared_ptr<BoundLiteralExpression> bound_literal_expression = std::dynamic_pointer_cast<BoundLiteralExpression>(expression);
-
-		// Only if bound literal expression is not nullptr (Dynamic cast was successfull)
-		if (bound_literal_expression) {
-			return bound_literal_expression->value;
-		}
+	switch (expression->expression_type) 
+	{
+	case BoundLiteralExpressionType: 
+		return this->evaluate_literal_expression(std::dynamic_pointer_cast<BoundLiteralExpression>(expression));
+	case BoundVariableExpressionType:
+		return this->evaluate_variable_expression(std::dynamic_pointer_cast<BoundVariableExpression>(expression));
+	case BoundAssignmentExpressionType:
+		return this->evaluate_assignment_expression(std::dynamic_pointer_cast<BoundAssignmentExpression>(expression));
+	case BoundUnaryExpressionType:
+		return this->evaluate_unary_expression(std::dynamic_pointer_cast<BoundUnaryExpression>(expression));
+	case BoundBinaryExpressionType:
+		return this->evaluate_binary_expression(std::dynamic_pointer_cast<BoundBinaryExpression>(expression));
+	default:
+		throw std::invalid_argument("Unexpected bound expression " + Utilities::bound_expression_name(expression->expression_type));
+		break;
 	}
+}
 
-	if (expression->expression_type == BoundVariableExpressionType) {
-		std::shared_ptr<BoundVariableExpression> bound_variable_expression = std::dynamic_pointer_cast<BoundVariableExpression>(expression);
-
-		if (bound_variable_expression) {
-			return (*this->variables)[bound_variable_expression->name];
-		}
-	}
-
-	if (expression->expression_type == BoundAssignmentExpressionType) {
-		std::shared_ptr<BoundAssignmentExpression> bound_assignment_expression = std::dynamic_pointer_cast<BoundAssignmentExpression>(expression);
-
-		if (bound_assignment_expression) {
-			std::any value = this->evaluate_expression(bound_assignment_expression->expression);
-			(*this->variables)[bound_assignment_expression->name] = value;
-			return value;
-		}
+std::any Evaluator::evaluate_literal_expression(std::shared_ptr<BoundLiteralExpression> expression) {
+	if (expression) {
+		return expression->value;
 	}
 
 
-	if (expression->expression_type == BoundUnaryExpressionType) {
-		std::shared_ptr<BoundUnaryExpression> bound_unary_expression = std::dynamic_pointer_cast<BoundUnaryExpression>(expression);
+	return std::any();
+}
 
-		// Only if unary expression is not nullptr (Dynamic cast was successfull)
-		if (bound_unary_expression) {
-			std::any result = this->evaluate_expression(bound_unary_expression->expression);
+std::any Evaluator::evaluate_variable_expression(std::shared_ptr<BoundVariableExpression> expression) {
+	if (expression) {
+		return (*this->variables)[expression->name];
+	}
+	return std::any();
+}
 
-			switch (bound_unary_expression->op->operator_type)
-			{
-			case Identity:
-				return std::any_cast<int>(result);
-			case Negation:
-				return -std::any_cast<int>(result);
-			case LogicalNegation:
-				return !std::any_cast<bool>(result);
-			default:
-				std::string op_name = Utilities::bound_unary_operator_name(bound_unary_expression->op->operator_type);
-				throw std::invalid_argument("Unexpected unary operator " + op_name + " for " + result.type().name());
+std::any Evaluator::evaluate_assignment_expression(std::shared_ptr<BoundAssignmentExpression> expression) {
+	if (expression) {
+		std::any value = this->evaluate_expression(expression->expression);
+		(*this->variables)[expression->name] = value;
+		return value;
+	}
+	return std::any();
+}
+
+std::any Evaluator::evaluate_unary_expression(std::shared_ptr<BoundUnaryExpression> expression) {
+	if (expression) {
+		std::any result = this->evaluate_expression(expression->expression);
+
+		switch (expression->op->operator_type)
+		{
+		case Identity:
+			return std::any_cast<int>(result);
+		case Negation:
+			return -std::any_cast<int>(result);
+		case LogicalNegation:
+			return !std::any_cast<bool>(result);
+		default:
+			std::string op_name = Utilities::bound_unary_operator_name(expression->op->operator_type);
+			throw std::invalid_argument("Unexpected unary operator " + op_name + " for " + result.type().name());
+		}
+	}
+	return std::any();
+}
+
+std::any Evaluator::evaluate_binary_expression(std::shared_ptr<BoundBinaryExpression> expression) {
+	if (expression) {
+		std::any left = this->evaluate_expression(expression->left);
+		std::any right = this->evaluate_expression(expression->right);
+		
+
+		switch (expression->op->operator_type) {
+		case Addition:
+			if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+				return std::any_cast<bool>(left) + std::any_cast<int>(right);
 			}
-		}
-	}
-
-	if (expression->expression_type == BoundBinaryExpressionType) {
-		std::shared_ptr<BoundBinaryExpression> bound_binary_expression = std::dynamic_pointer_cast<BoundBinaryExpression>(expression);
-
-		// Only if binary expression is not nullptr (Dynamic cast was successfull)
-		if (bound_binary_expression) {
-			std::any left = this->evaluate_expression(bound_binary_expression->left);
-			std::any right = this->evaluate_expression(bound_binary_expression->right);
-
-			switch (bound_binary_expression->op->operator_type) {
-			case Addition:
-				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
-					return std::any_cast<bool>(left) + std::any_cast<int>(right);
-				}
-				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
-					return std::any_cast<int>(left) + std::any_cast<bool>(right);
-				}
-				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
-					return std::any_cast<bool>(left) + std::any_cast<bool>(right);
-				}
-
-				return std::any_cast<int>(left) + std::any_cast<int>(right);
-			case Subtraction:
-				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
-					return std::any_cast<bool>(left) - std::any_cast<int>(right);
-				}
-				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
-					return std::any_cast<int>(left) - std::any_cast<bool>(right);
-				}
-				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
-					return std::any_cast<bool>(left) - std::any_cast<bool>(right);
-				}
-
-				return std::any_cast<int>(left) - std::any_cast<int>(right);
-			case Multiplication:
-				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
-					return std::any_cast<bool>(left) * std::any_cast<int>(right);
-				}
-				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
-					return std::any_cast<int>(left) * std::any_cast<bool>(right);
-				}
-				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
-					return std::any_cast<bool>(left) * std::any_cast<bool>(right);
-				}
-
-				return std::any_cast<int>(left) * std::any_cast<int>(right);
-			case Division:
-				if (left.type() == typeid(bool) && right.type() == typeid(int)) {
-					return std::any_cast<bool>(left) / std::any_cast<int>(right);
-				}
-				else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
-					return std::any_cast<int>(left) / std::any_cast<bool>(right);
-				}
-				else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
-					return std::any_cast<bool>(left) / std::any_cast<bool>(right);
-				}
-
-				return std::any_cast<int>(left) / std::any_cast<int>(right);
-			case LogicalAnd:
-				return std::any_cast<bool>(left) && std::any_cast<bool>(right);
-			case LogicalOr:
-				return std::any_cast<bool>(left) || std::any_cast<bool>(right);
-			case Equal:
-				if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
-					return std::any_cast<bool>(left) == std::any_cast<bool>(right);
-				}
-				else if (left.type() == typeid(int) && right.type() == typeid(int)) {
-					return std::any_cast<int>(left) == std::any_cast<int>(right);
-				}
-			case NotEqual:
-				if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
-					return std::any_cast<bool>(left) != std::any_cast<bool>(right);
-				}
-				else if (left.type() == typeid(int) && right.type() == typeid(int)) {
-					return std::any_cast<int>(left) != std::any_cast<int>(right);
-				}
-			default:
-				std::string op_name = Utilities::bound_binary_operator_name(bound_binary_expression->op->operator_type);
-				throw std::invalid_argument("Unexpected binary operator " + op_name + " for " + left.type().name() + " and " + right.type().name());
+			else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+				return std::any_cast<int>(left) + std::any_cast<bool>(right);
 			}
+			else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+				return std::any_cast<bool>(left) + std::any_cast<bool>(right);
+			}
+
+			return std::any_cast<int>(left) + std::any_cast<int>(right);
+		case Subtraction:
+			if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+				return std::any_cast<bool>(left) - std::any_cast<int>(right);
+			}
+			else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+				return std::any_cast<int>(left) - std::any_cast<bool>(right);
+			}
+			else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+				return std::any_cast<bool>(left) - std::any_cast<bool>(right);
+			}
+
+			return std::any_cast<int>(left) - std::any_cast<int>(right);
+		case Multiplication:
+			if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+				return std::any_cast<bool>(left) * std::any_cast<int>(right);
+			}
+			else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+				return std::any_cast<int>(left) * std::any_cast<bool>(right);
+			}
+			else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+				return std::any_cast<bool>(left) * std::any_cast<bool>(right);
+			}
+
+			return std::any_cast<int>(left) * std::any_cast<int>(right);
+		case Division:
+			if (left.type() == typeid(bool) && right.type() == typeid(int)) {
+				return std::any_cast<bool>(left) / std::any_cast<int>(right);
+			}
+			else if (left.type() == typeid(int) && right.type() == typeid(bool)) {
+				return std::any_cast<int>(left) / std::any_cast<bool>(right);
+			}
+			else if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+				return std::any_cast<bool>(left) / std::any_cast<bool>(right);
+			}
+
+			return std::any_cast<int>(left) / std::any_cast<int>(right);
+		case LogicalAnd:
+			return std::any_cast<bool>(left) && std::any_cast<bool>(right);
+		case LogicalOr:
+			return std::any_cast<bool>(left) || std::any_cast<bool>(right);
+		case Equal:
+			if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+				return std::any_cast<bool>(left) == std::any_cast<bool>(right);
+			}
+			else if (left.type() == typeid(int) && right.type() == typeid(int)) {
+				return std::any_cast<int>(left) == std::any_cast<int>(right);
+			}
+		case NotEqual:
+			if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
+				return std::any_cast<bool>(left) != std::any_cast<bool>(right);
+			}
+			else if (left.type() == typeid(int) && right.type() == typeid(int)) {
+				return std::any_cast<int>(left) != std::any_cast<int>(right);
+			}
+		default:
+			std::string op_name = Utilities::bound_binary_operator_name(expression->op->operator_type);
+			throw std::invalid_argument("Unexpected binary operator " + op_name + " for " + left.type().name() + " and " + right.type().name());
 		}
 	}
-
-	throw new std::invalid_argument("Invalid expression");
+	return std::any();
 }
