@@ -88,7 +88,6 @@ std::any Evaluator::evaluate_unary_expression(std::shared_ptr<BoundUnaryExpressi
 			throw std::invalid_argument("Unexpected unary operator " + op_name + " for " + result.type().name());
 		}
 	}
-
 	throw std::invalid_argument("Could not cast BoundExpression to BoundUnaryExpression");
 }
 
@@ -96,7 +95,6 @@ std::any Evaluator::evaluate_binary_expression(std::shared_ptr<BoundBinaryExpres
 	if (expression) {
 		std::any left = this->evaluate_expression(expression->left);
 		std::any right = this->evaluate_expression(expression->right);
-
 
 		switch (expression->op->operator_type) {
 		case Addition:
