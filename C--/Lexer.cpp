@@ -41,87 +41,150 @@ std::optional<int> Lexer::parse_int(std::string str) {
 
 Token Lexer::get_token() {
 	int start = this->position;
-	if (isdigit(this->peek())) {
-		int length = this->eat_until(isdigit);
-		std::string raw = this->text.substr(start, length);
+	TokenType token_type = BadToken;
+	std::any value;
 
-		std::optional<int> value_optional = this->parse_int(raw);
-
-		int value = 0;
-		if (!value_optional.has_value()) {
-			this->diagnostics.report_invalid_number(start, length, raw, typeid(int));
-		}
-		else {
-			value = value_optional.value();
-		}
-
-		return Token(NumberToken, start, raw, std::make_any<int>(value));
-	}
-
-	if (isspace(this->peek())) {
-		int length = this->eat_until(isspace);
-		// Is there a point of this? I didn't saw it, so it stays in comment
-		// std::string raw = this->text.substr(start, length);
-		return Token(WhiteSpaceToken, start, "", nullptr);
-	}
-
-	if (isalpha(this->peek())) {
-		int length = this->eat_until(isalpha);
-
-		std::string raw = this->text.substr(start, length);
-		TokenType type = ParserRules::get_token_type_by_keyword(raw);
-		bool value = type == TrueKeywordToken;
-		return Token(type, start, raw, std::make_any<bool>(value));
-	}
-
-	char current = this->peek();
-	switch (current) {
-	case '+': return Token(PlusToken, this->next(), current, nullptr);
-	case '-': return Token(MinusToken, this->next(), current, nullptr);
-	case '*': return Token(StarToken, this->next(), current, nullptr);
-	case '/': return Token(SlashToken, this->next(), current, nullptr);
-	case '(': return Token(OpenParenthesisToken, this->next(), current, nullptr);
-	case ')': return Token(CloseParenthesisToken, this->next(), current, nullptr);
-	case '!': {
-		if (this->peek(1) == '=') {
-			this->next(); this->next();
-			return Token(ExclamationEqualToken, start, "!=", nullptr);
-		}
-		else {
-			return Token(ExclamationToken, this->next(), current, nullptr);
-		}
-	}
-	case '&': {
+	switch (this->peek()) {
+	case '\0':
+		token_type = EndOfFileToken;
+		break;
+	case '+':
+		token_type = PlusToken;
+		this->position++;
+		break;
+	case '-':
+		token_type = MinusToken;
+		this->position++;
+		break;
+	case '*':
+		token_type = StarToken;
+		this->position++;
+		break;
+	case '/':
+		token_type = SlashToken;
+		this->position++;
+		break;
+	case '(':
+		token_type = OpenParenthesisToken;
+		this->position++;
+		break;
+	case ')':
+		token_type = CloseParenthesisToken;
+		this->position++;
+		break;
+	case '&':
 		if (this->peek(1) == '&') {
-			this->next(); this->next();
-			return Token(DoubleAmpersandToken, start, "&&", nullptr);
+			token_type = DoubleAmpersandToken;
+			this->position++;
+			break;
 		}
+		this->position++;
 		break;
-	}
-	case '|': {
+	case '|':
 		if (this->peek(1) == '|') {
-			this->next(); this->next();
-			return Token(DoublePipeToken, start, "||", nullptr);
+			token_type = DoublePipeToken;
+			this->position++;
+			break;
 		}
+		this->position++;
 		break;
-	}
-	case '=': {
+	case '=':
 		if (this->peek(1) == '=') {
-			this->next(); this->next();
-			return Token(DoubleEqualToken, start, "==", nullptr);
+			token_type = DoubleEqualToken;
+			this->position++;
 		}
 		else {
-			return Token(EqualToken, this->next(), current, nullptr);
+			token_type = EqualToken;
 		}
-	}
+		this->position++;
+		break;
+	case '!':
+		if (this->peek(1) == '=') {
+			token_type = ExclamationEqualToken;
+			this->position++;
+		}
+		else {
+			token_type = ExclamationToken;
+		}
+		this->position++;
+		break;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+		this->read_number_token(start, token_type, value);
+		break;
+	case ' ':
+	case '\t':
+	case '\n':
+	case '\r':
+		this->read_whitespace_token(start, token_type);
+		break;
+	default:
+		if (isalpha(this->peek())) {
+			this->read_identifier_or_keyword_token(start, token_type);
+		}
+		else if (isspace(this->peek())) {
+			this->read_whitespace_token(start, token_type);
+		}
+		else {
+			this->diagnostics.report_bad_character(this->position, this->peek());
+		}
+		break;
 	}
 
-	this->diagnostics.report_bad_character(this->position, current);
-	return Token(BadToken, this->next(), current, nullptr);
+	std::optional<std::string> text_optional = ParserRules::get_token_text(token_type);
+	std::string text;
+
+	if (!text_optional.has_value()) {
+		int length = this->position - start;
+		text = this->text.substr(start, length);
+	}
+	else {
+		text = text_optional.value();
+	}
+
+
+	return Token(token_type, start, text, value);
 }
 
 bool Lexer::is_token_skipable(const Token& token) {
 	return token.type == WhiteSpaceToken;
+}
+
+void Lexer::read_number_token(int start, TokenType& token_type, std::any& value) {
+	int length = this->eat_until(isdigit);
+	std::string raw = this->text.substr(start, length);
+
+	std::optional<int> value_optional = this->parse_int(raw);
+
+	if (!value_optional.has_value()) {
+		this->diagnostics.report_invalid_number(start, length, raw, typeid(int));
+	}
+	else {
+		token_type = NumberToken;
+		value = value_optional.value();
+	}
+}
+
+void Lexer::read_whitespace_token(int start, TokenType& token_type) {
+	int length = this->eat_until(isspace);
+	// Is there a point of this? I didn't saw it, so it stays in comment
+	// std::string raw = this->text.substr(start, length);
+	token_type = WhiteSpaceToken;
+}
+
+void Lexer::read_identifier_or_keyword_token(int start, TokenType& token_type) {
+	int length = this->eat_until(isalpha);
+
+	std::string raw = this->text.substr(start, length);
+	token_type = ParserRules::get_token_type_by_keyword(raw);
 }
 
 char Lexer::peek(int offset) {
@@ -133,15 +196,11 @@ char Lexer::peek(int offset) {
 	return this->text[position];
 }
 
-int Lexer::next() {
-	return this->position++;
-}
-
 int Lexer::eat_until(int __cdecl compare(int)) {
 	int start = this->position;
 
 	while (compare(this->peek())) {
-		this->next();
+		this->position++;
 	}
 
 	int length = this->position - start;
