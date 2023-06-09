@@ -6,6 +6,9 @@
 
 #include "ExpressionTree.h"
 #include "Expression.h"
+#include "LiteralExpression.h"
+#include "ParenthesizedExpression.h"
+#include "NameExpression.h"
 
 #include "Token.h"
 #include "TokenType.h"
@@ -26,6 +29,11 @@ private:
 	std::shared_ptr<Expression> parse_assignment_expression();
 	std::shared_ptr<Expression> parse_binary_expression(int = 0);
 	std::shared_ptr<Expression> parse_primary();
+
+	std::shared_ptr<LiteralExpression> parse_boolean_literal_expression();
+	std::shared_ptr<LiteralExpression> parse_number_literal_expression();
+	std::shared_ptr<ParenthesizedExpression> parse_parenthesized_expression();
+	std::shared_ptr<NameExpression> parse_name_expression();
 
 	Token peek(int = 0);
 	Token match(TokenType);
