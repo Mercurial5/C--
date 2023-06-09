@@ -59,7 +59,7 @@ std::any Evaluator::evaluate_variable_expression(std::shared_ptr<BoundVariableEx
 	if (expression) {
 		auto variable_pair = VariableSymbol::find(this->variables, expression->variable->name);
 		if (variable_pair != end(*this->variables)) {
-			return variable_pair->first;
+			return variable_pair->second;
 		}
 
 		throw std::invalid_argument("Variable " + expression->variable->name + " does not exists");
