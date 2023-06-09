@@ -30,7 +30,7 @@ private:
 
 	void read_number_token(int, TokenType&, std::any&);
 	void read_whitespace_token(int, TokenType&);
-	void read_identifier_or_keyword_token(int, TokenType&);
+	void read_identifier_or_keyword_token(int, TokenType&, std::any& value);
 
 	// utilities
 

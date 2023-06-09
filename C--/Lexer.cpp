@@ -75,7 +75,7 @@ Token Lexer::get_token() {
 	case '&':
 		if (this->peek(1) == '&') {
 			token_type = DoubleAmpersandToken;
-			this->position++;
+			this->position += 2;
 			break;
 		}
 		this->position++;
@@ -83,7 +83,7 @@ Token Lexer::get_token() {
 	case '|':
 		if (this->peek(1) == '|') {
 			token_type = DoublePipeToken;
-			this->position++;
+			this->position += 2;
 			break;
 		}
 		this->position++;
@@ -91,7 +91,7 @@ Token Lexer::get_token() {
 	case '=':
 		if (this->peek(1) == '=') {
 			token_type = DoubleEqualToken;
-			this->position++;
+			this->position += 2;
 		}
 		else {
 			token_type = EqualToken;
@@ -101,7 +101,7 @@ Token Lexer::get_token() {
 	case '!':
 		if (this->peek(1) == '=') {
 			token_type = ExclamationEqualToken;
-			this->position++;
+			this->position += 2;
 		}
 		else {
 			token_type = ExclamationToken;
@@ -128,7 +128,7 @@ Token Lexer::get_token() {
 		break;
 	default:
 		if (isalpha(this->peek())) {
-			this->read_identifier_or_keyword_token(start, token_type);
+			this->read_identifier_or_keyword_token(start, token_type, value);
 		}
 		else if (isspace(this->peek())) {
 			this->read_whitespace_token(start, token_type);
@@ -180,11 +180,22 @@ void Lexer::read_whitespace_token(int start, TokenType& token_type) {
 	token_type = WhiteSpaceToken;
 }
 
-void Lexer::read_identifier_or_keyword_token(int start, TokenType& token_type) {
+void Lexer::read_identifier_or_keyword_token(int start, TokenType& token_type, std::any& value) {
 	int length = this->eat_until(isalpha);
 
 	std::string raw = this->text.substr(start, length);
 	token_type = ParserRules::get_token_type_by_keyword(raw);
+
+	switch (token_type)
+	{
+	case TrueKeywordToken:
+		value = true;
+		break;
+	case FalseKeywordToken:
+		value = false;
+		break;
+	}
+
 }
 
 char Lexer::peek(int offset) {
