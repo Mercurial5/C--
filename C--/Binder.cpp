@@ -48,11 +48,11 @@ std::shared_ptr<BoundExpression> Binder::bind_expression(std::shared_ptr<Express
 	switch (expression->type)
 	{
 	case LiteralExpressionType: return this->bind_literal_expression(this->cast<LiteralExpression>(expression));
+	case NameExpressionType: return this->bind_name_expression(this->cast<NameExpression>(expression));
+	case AssignmentExpressionType: return this->bind_assignment_expression(this->cast<AssignmentExpression>(expression));
 	case UnaryExpressionType: return this->bind_unary_expression(this->cast<UnaryExpression>(expression));
 	case BinaryExpressionType: return this->bind_binary_expression(this->cast<BinaryExpression>(expression));
 	case ParenthesizedExpressionType: return this->bind_parenthesized_expression(this->cast<ParenthesizedExpression>(expression));
-	case NameExpressionType: return this->bind_name_expression(this->cast<NameExpression>(expression));
-	case AssignmentExpressionType: return this->bind_assignment_expression(this->cast<AssignmentExpression>(expression));
 	default: throw std::invalid_argument("Unexpected expression type in bind_expression");
 	}
 }
