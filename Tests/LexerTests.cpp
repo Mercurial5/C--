@@ -32,7 +32,26 @@ std::vector<std::pair<TokenType, std::string>> token_data = {
     {StarToken, "*"},
     {SlashToken, "/"},
     {OpenParenthesisToken, "("},
-    {CloseParenthesisToken, ")"}
+    {CloseParenthesisToken, ")"},
+    {TrueKeywordToken, "truly"},
+    {FalseKeywordToken, "falsy"},
+    {DoubleAmpersandToken, "&&"},
+    {DoublePipeToken, "||"},
+    {DoubleEqualToken, "=="},
+    {ExclamationEqualToken, "!="},
+    {WhiteSpaceToken, " "},
+    {WhiteSpaceToken, "  "},
+    {WhiteSpaceToken, "\r"},
+    {WhiteSpaceToken, "\n"},
+    {WhiteSpaceToken, "\r\n"}
+};
+
+std::vector<std::pair<TokenType, std::string>> separators = {
+    {WhiteSpaceToken, " "},
+    {WhiteSpaceToken, "  "},
+    {WhiteSpaceToken, "\r"},
+    {WhiteSpaceToken, "\n"},
+    {WhiteSpaceToken, "\r\n"}
 };
 
 INSTANTIATE_TEST_CASE_P(Tokens, LexerTests, testing::ValuesIn(token_data));
