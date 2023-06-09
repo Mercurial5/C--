@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <algorithm>
 #include <typeinfo>
 #include <optional>
 #include <string>
@@ -32,10 +33,12 @@
 
 #include "Parser.h"
 
+#include "VariableSymbol.h"
+
 #include "Utilities.h"
 
 
-Binder::Binder(DiagnosticBag diagnostics, std::map<std::string, std::any>& variables) {
+Binder::Binder(DiagnosticBag diagnostics, std::map<std::shared_ptr<VariableSymbol>, std::any>& variables) {
 	this->diagnostics.extend(diagnostics);
 	this->variables = &variables;
 }
@@ -120,14 +123,13 @@ std::shared_ptr<BoundExpression> Binder::bind_name_expression(std::shared_ptr<Na
 	}
 
 	std::string name = expression->identifier_token->raw;
-	if (this->variables->find(name) == end(*this->variables)) {
+	auto variable_pair = this->find(name);
+	if (variable_pair == end(*this->variables)) {
 		this->diagnostics.report_undefined_name(expression->identifier_token->span, name);
 		return std::make_shared<BoundLiteralExpression>(0);
 	}
 
-	std::any value = (*this->variables)[name];
-	const std::type_info& type = value.type();
-	return std::make_shared<BoundVariableExpression>(name, &type);
+	return std::make_shared<BoundVariableExpression>(variable_pair->first);
 }
 
 std::shared_ptr<BoundExpression> Binder::bind_assignment_expression(std::shared_ptr<AssignmentExpression> expression) {
@@ -138,5 +140,17 @@ std::shared_ptr<BoundExpression> Binder::bind_assignment_expression(std::shared_
 	std::string name = expression->identifier_token->raw;
 	std::shared_ptr<BoundExpression> bound_expression = this->bind_expression(expression->expression);
 
-	return std::make_shared<BoundAssignmentExpression>(name, bound_expression);
+	auto variable_pair = this->find(name);
+	if (variable_pair == end(*this->variables)) {
+		std::shared_ptr<VariableSymbol> variable = std::make_shared<VariableSymbol>(name, bound_expression->type());
+		return std::make_shared<BoundAssignmentExpression>(variable, bound_expression);
+	}
+
+	return std::make_shared<BoundAssignmentExpression>(variable_pair->first, bound_expression);
+}
+
+std::map<std::shared_ptr<VariableSymbol>, std::any>::iterator Binder::find(std::string name) {
+	auto finder = [&name](std::pair<std::shared_ptr<VariableSymbol>, std::any> i) { return i.first->name == name; };
+
+	return std::find_if(begin(*this->variables), end(*this->variables), finder);
 }

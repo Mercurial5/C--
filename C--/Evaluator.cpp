@@ -20,9 +20,11 @@
 #include "BoundBinaryExpression.h"
 #include "BoundBinaryOperatorType.h"
 
+#include "VariableSymbol.h"
+
 #include "Utilities.h"
 
-Evaluator::Evaluator(std::map<std::string, std::any>& variables) {
+Evaluator::Evaluator(std::map<std::shared_ptr<VariableSymbol>, std::any>& variables) {
 	this->variables = &variables;
 }
 
