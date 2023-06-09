@@ -57,7 +57,12 @@ std::any Evaluator::evaluate_literal_expression(std::shared_ptr<BoundLiteralExpr
 
 std::any Evaluator::evaluate_variable_expression(std::shared_ptr<BoundVariableExpression> expression) {
 	if (expression) {
-		return (*this->variables)[expression->name];
+		auto variable_pair = VariableSymbol::find(this->variables, expression->variable->name);
+		if (variable_pair != end(*this->variables)) {
+			return variable_pair->first;
+		}
+
+		throw std::invalid_argument("Variable " + expression->variable->name + " does not exists");
 	}
 
 	throw std::invalid_argument("Could not cast BoundExpression to BoundVariableExpression");
@@ -66,7 +71,17 @@ std::any Evaluator::evaluate_variable_expression(std::shared_ptr<BoundVariableEx
 std::any Evaluator::evaluate_assignment_expression(std::shared_ptr<BoundAssignmentExpression> expression) {
 	if (expression) {
 		std::any value = this->evaluate_expression(expression->expression);
-		(*this->variables)[expression->name] = value;
+		auto variable_pair = VariableSymbol::find(this->variables, expression->variable->name);
+
+		std::shared_ptr<VariableSymbol> variable;
+		if (variable_pair != end(*this->variables)) {
+			variable = variable_pair->first;
+		}
+		else {
+			variable = std::make_shared<VariableSymbol>(expression->variable->name, value.type());
+		}
+
+		(*this->variables)[variable] = value;
 		return value;
 	}
 
