@@ -51,11 +51,11 @@ std::shared_ptr<BoundExpression> Binder::bind_expression(std::shared_ptr<Express
 	switch (expression->type)
 	{
 	case LiteralExpressionType: return this->bind_literal_expression(this->cast<LiteralExpression>(expression));
+	case NameExpressionType: return this->bind_name_expression(this->cast<NameExpression>(expression));
+	case AssignmentExpressionType: return this->bind_assignment_expression(this->cast<AssignmentExpression>(expression));
 	case UnaryExpressionType: return this->bind_unary_expression(this->cast<UnaryExpression>(expression));
 	case BinaryExpressionType: return this->bind_binary_expression(this->cast<BinaryExpression>(expression));
 	case ParenthesizedExpressionType: return this->bind_parenthesized_expression(this->cast<ParenthesizedExpression>(expression));
-	case NameExpressionType: return this->bind_name_expression(this->cast<NameExpression>(expression));
-	case AssignmentExpressionType: return this->bind_assignment_expression(this->cast<AssignmentExpression>(expression));
 	default: throw std::invalid_argument("Unexpected expression type in bind_expression");
 	}
 }
@@ -123,7 +123,7 @@ std::shared_ptr<BoundExpression> Binder::bind_name_expression(std::shared_ptr<Na
 	}
 
 	std::string name = expression->identifier_token->raw;
-	auto variable_pair = this->find(name);
+	auto variable_pair = VariableSymbol::find(this->variables, name);
 	if (variable_pair == end(*this->variables)) {
 		this->diagnostics.report_undefined_name(expression->identifier_token->span, name);
 		return std::make_shared<BoundLiteralExpression>(0);
@@ -140,17 +140,11 @@ std::shared_ptr<BoundExpression> Binder::bind_assignment_expression(std::shared_
 	std::string name = expression->identifier_token->raw;
 	std::shared_ptr<BoundExpression> bound_expression = this->bind_expression(expression->expression);
 
-	auto variable_pair = this->find(name);
+	auto variable_pair = VariableSymbol::find(this->variables, name);
 	if (variable_pair == end(*this->variables)) {
 		std::shared_ptr<VariableSymbol> variable = std::make_shared<VariableSymbol>(name, bound_expression->type());
 		return std::make_shared<BoundAssignmentExpression>(variable, bound_expression);
 	}
 
 	return std::make_shared<BoundAssignmentExpression>(variable_pair->first, bound_expression);
-}
-
-std::map<std::shared_ptr<VariableSymbol>, std::any>::iterator Binder::find(std::string name) {
-	auto finder = [&name](std::pair<std::shared_ptr<VariableSymbol>, std::any> i) { return i.first->name == name; };
-
-	return std::find_if(begin(*this->variables), end(*this->variables), finder);
 }

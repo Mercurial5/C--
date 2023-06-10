@@ -43,8 +43,6 @@ private:
 	std::shared_ptr<BoundExpression> bind_parenthesized_expression(std::shared_ptr<ParenthesizedExpression>);
 	std::shared_ptr<BoundExpression> bind_name_expression(std::shared_ptr<NameExpression>);
 	std::shared_ptr<BoundExpression> bind_assignment_expression(std::shared_ptr<AssignmentExpression>);
-
-	std::map<std::shared_ptr<VariableSymbol>, std::any>::iterator find(std::string);
 	
 	template <typename CastTo, typename CastFrom>
 	std::shared_ptr<CastTo> cast(std::shared_ptr<CastFrom> obj) {

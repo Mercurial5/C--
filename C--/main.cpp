@@ -71,7 +71,7 @@ int main() {
 			std::cout << "= " << std::any_cast<int>(result.value) << std::endl;
 		}
 		else {
-			std::cout << "This type is not supported" << std::endl;
+			std::cout << result.value.type().name() << " type is not supported" << std::endl;
 		}
 	}
 }

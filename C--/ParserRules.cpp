@@ -1,3 +1,6 @@
+#include <optional>
+#include <string>
+
 #include "ParserRules.h"
 
 #include "TokenType.h"
@@ -50,4 +53,40 @@ TokenType ParserRules::get_token_type_by_keyword(std::string keyword) {
 	}
 
 	return IdentifierToken;
+}
+
+std::optional<std::string> ParserRules::get_token_text(TokenType token_type) {
+	switch (token_type)
+	{
+	case TrueKeywordToken:
+		return "truly";
+	case FalseKeywordToken:
+		return "falsy";
+	case PlusToken:
+		return "+";
+	case MinusToken:
+		return "-";
+	case StarToken:
+		return "*";
+	case SlashToken:
+		return "/";
+	case EqualToken:
+		return "=";
+	case ExclamationToken:
+		return "!";
+	case DoubleAmpersandToken:
+		return "&&";
+	case DoublePipeToken:
+		return "||";
+	case DoubleEqualToken:
+		return "==";
+	case ExclamationEqualToken:
+		return "!=";
+	case OpenParenthesisToken:
+		return "(";
+	case CloseParenthesisToken:
+		return ")";
+	default:
+		return std::nullopt;
+	}
 }

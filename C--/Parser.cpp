@@ -85,25 +85,40 @@ std::shared_ptr<Expression> Parser::parse_binary_expression(int parent_precedenc
 
 std::shared_ptr<Expression> Parser::parse_primary() {
 	switch (this->current().type) {
+	case OpenParenthesisToken:
+		return this->parse_parenthesized_expression();
 	case TrueKeywordToken:
 	case FalseKeywordToken:
-		return std::make_shared<LiteralExpression>(std::make_shared<Token>(this->next()));
+		return this->parse_boolean_literal_expression();
+	case NumberToken:
+		return this->parse_number_literal_expression();
+	case IdentifierToken:
+	default:
+		return this->parse_name_expression();
+	}
+}
 
-	case OpenParenthesisToken: {
-		Token open = this->next();
-		std::shared_ptr<Expression> expression = this->parse_expression();
-		Token close = this->match(CloseParenthesisToken);
-		return std::make_shared<ParenthesizedExpression>(std::make_shared<Token>(open), expression, std::make_shared<Token>(close));
-	}
-	case IdentifierToken: {
-		std::shared_ptr<Token> identifier_token = std::make_shared<Token>(this->next());
-		return std::make_shared<NameExpression>(identifier_token);
-	}
-	default: {
-		Token identifier_token = this->match(NumberToken);
-		return std::make_shared<LiteralExpression>(std::make_shared<Token>(identifier_token));
-	}
-	}
+std::shared_ptr<LiteralExpression> Parser::parse_boolean_literal_expression() {
+	bool value = this->current().type == TrueKeywordToken;
+	Token keyword_token = value ? this->match(TrueKeywordToken) : this->match(FalseKeywordToken);
+	return std::make_shared<LiteralExpression>(std::make_shared<Token>(keyword_token), value);
+}
+
+std::shared_ptr<LiteralExpression> Parser::parse_number_literal_expression() {
+	Token number_token = this->match(NumberToken);
+	return std::make_shared<LiteralExpression>(std::make_shared<Token>(number_token));
+}
+
+std::shared_ptr<ParenthesizedExpression> Parser::parse_parenthesized_expression() {
+	Token open = this->next();
+	std::shared_ptr<Expression> expression = this->parse_expression();
+	Token close = this->match(CloseParenthesisToken);
+	return std::make_shared<ParenthesizedExpression>(std::make_shared<Token>(open), expression, std::make_shared<Token>(close));
+}
+
+std::shared_ptr<NameExpression> Parser::parse_name_expression() {
+	std::shared_ptr<Token> identifier_token = std::make_shared<Token>(this->next());
+	return std::make_shared<NameExpression>(identifier_token);
 }
 
 Token Parser::peek(int offset) {

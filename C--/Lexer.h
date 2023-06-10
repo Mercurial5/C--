@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <any>
 
 #include "Token.h"
 
@@ -27,13 +28,14 @@ private:
 	bool is_token_skipable(const Token&);
 
 
+	void read_number_token(int, TokenType&, std::any&);
+	void read_whitespace_token(int, TokenType&);
+	void read_identifier_or_keyword_token(int, TokenType&, std::any& value);
+
 	// utilities
 
 	// Returns character of a current + offset position
 	char peek(int = 0);
-
-	// Increment position and return previous position
-	int next();
 
 	// Eats all character while compare function is true
 	int eat_until(int __cdecl (int));
