@@ -99,7 +99,9 @@ std::shared_ptr<Expression> Parser::parse_primary() {
 }
 
 std::shared_ptr<LiteralExpression> Parser::parse_boolean_literal_expression() {
-	return std::make_shared<LiteralExpression>(std::make_shared<Token>(this->next()));
+	bool value = this->current().type == TrueKeywordToken;
+	Token keyword_token = value ? this->match(TrueKeywordToken) : this->match(FalseKeywordToken);
+	return std::make_shared<LiteralExpression>(std::make_shared<Token>(keyword_token), value);
 }
 
 std::shared_ptr<LiteralExpression> Parser::parse_number_literal_expression() {
